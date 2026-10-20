@@ -1,0 +1,12 @@
+{
+  "name": "@relaycheck/dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "description": "RelayCheck Dashboard - Next.js + Tailwind UI for run history, scenario execution, and delivery evidence. Calls the Control API only.",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}
