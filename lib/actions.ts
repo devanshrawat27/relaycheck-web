@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 
-const SUPPORTED_SCENARIOS = ['duplicate_delivery'] as const;
+const SUPPORTED_SCENARIOS = ['duplicate_delivery', 'receiver_failure', 'receiver_timeout'] as const;
 
 function isSupportedScenario(value: unknown): boolean {
   return typeof value === 'string' && (SUPPORTED_SCENARIOS as readonly string[]).includes(value);
