@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { RunScenarioForm } from '@/components/run-scenario-form';
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -15,17 +16,32 @@ export default function NewRunPage({ searchParams }: NewRunPageProps) {
   const errorMessage = raw ? (ERROR_MESSAGES[raw] ?? 'The run could not be started.') : null;
 
   return (
-    <section aria-labelledby="new-run-heading" className="max-w-2xl space-y-6">
-      <div className="space-y-1">
-        <h1 id="new-run-heading" className="text-2xl font-semibold tracking-tight">
-          Run a scenario
+    <section aria-labelledby="new-run-heading" className="max-w-3xl space-y-10">
+      <div className="space-y-3">
+        <Link
+          href="/"
+          className="text-xs text-muted underline-offset-4 hover:text-ink hover:underline"
+        >
+          ← Back to runs
+        </Link>
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember">
+          RelayCheck / New run
+        </p>
+        <h1
+          id="new-run-heading"
+          className="text-4xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-5xl"
+        >
+          Run a scenario.
         </h1>
-        <p className="text-sm text-neutral-400">
-          Start a repeatable webhook test against the local demo receiver. Review the planned
-          behavior before starting.
+        <p className="max-w-xl text-sm leading-relaxed text-muted">
+          Start a repeatable webhook test against the local demo receiver. RelayCheck chooses the
+          parameters; you choose the behaviour you want to prove.
         </p>
         {errorMessage ? (
-          <p role="alert" className="text-sm text-red-300">
+          <p
+            role="alert"
+            className="rounded-xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger"
+          >
             {errorMessage}
           </p>
         ) : null}

@@ -7,20 +7,22 @@ jest.mock('@/lib/actions', () => ({
 import { RunScenarioForm } from '@/components/run-scenario-form';
 
 describe('RunScenarioForm', () => {
-  it('offers the supported scenarios and a preview', () => {
+  it('offers the supported scenarios as selectable cards and a preview', () => {
     render(<RunScenarioForm />);
 
-    const select = screen.getByLabelText('Scenario') as HTMLSelectElement;
-    expect(Array.from(select.options).map((option) => option.value)).toEqual([
+    const radios = screen.getAllByRole('radio');
+    expect(radios.map((radio) => (radio as HTMLInputElement).value)).toEqual([
       'duplicate_delivery',
       'receiver_failure',
       'receiver_timeout',
     ]);
+    expect((radios[0] as HTMLInputElement).checked).toBe(true);
 
-    expect(screen.getByText('Planned behavior')).toBeInTheDocument();
-    expect(screen.getAllByText(/Controlled receiver failure/i).length).toBeGreaterThanOrEqual(2);
-    expect(screen.getAllByText(/Receiver timeout/i).length).toBeGreaterThanOrEqual(2);
-    expect(screen.getByRole('button', { name: 'Start run' })).toBeInTheDocument();
+    expect(screen.getByText('Choose a scenario')).toBeInTheDocument();
+    expect(screen.getByText('Bounded by design')).toBeInTheDocument();
+    expect(screen.getByText('Controlled receiver failure')).toBeInTheDocument();
+    expect(screen.getByText('Receiver timeout')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Start run/ })).toBeInTheDocument();
   });
 
   it('never exposes a destination URL input', () => {
@@ -29,7 +31,9 @@ describe('RunScenarioForm', () => {
     expect(container.querySelector('input[type="url"]')).toBeNull();
     expect(container.querySelector('input[name="url"]')).toBeNull();
     expect(container.querySelector('input[name="destinationUrl"]')).toBeNull();
-    // The only form control is the scenario selector.
-    expect(container.querySelectorAll('input, select').length).toBe(1);
+    // The only inputs are the three scenario radios.
+    const inputs = Array.from(container.querySelectorAll('input'));
+    expect(inputs).toHaveLength(3);
+    expect(inputs.every((input) => input.getAttribute('name') === 'scenario')).toBe(true);
   });
 });

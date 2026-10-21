@@ -43,12 +43,13 @@ lib/
 
 ## Run form
 
-`/runs/new` exposes exactly one input — the scenario selector. It shows a
-"Planned behavior" preview (3 deliveries, same event ID, fixed local target,
-bounded timeout, one business effect). There is no destination URL field and
-unknown scenarios are rejected server-side (redirect with an inline error).
-The form is a plain server action, so it works without client JavaScript;
-verified end-to-end: submitting creates a real `queued` run.
+`/runs/new` exposes exactly one input — the scenario selector — with three
+scenarios: `duplicate_delivery`, `receiver_failure`, and `receiver_timeout`.
+It shows a "Planned behavior" preview for each and never renders a
+destination URL field; unknown scenarios are rejected server-side (redirect
+with an inline error). The form is a plain server action, so it works
+without client JavaScript; verified end-to-end: submitting creates a real
+`queued` run.
 
 ## Design rules followed (`DESIGN.md`)
 
@@ -72,6 +73,9 @@ touches PostgreSQL or RabbitMQ.
 - `npm install` / `npm ci` — install dependencies.
 - `npm run dev` — development server on port 3000.
 - `npm run lint` / `npm run type-check` — static checks.
+- `npm test` — Jest + React Testing Library component tests: status badges,
+  API-error panel, evidence tables, status filters, run form (scenario
+  options + no destination input), and the Control API client.
 - `npm run build` / `npm start` — production build and server on port 3000.
 
 Package manager: **npm** (lockfiles are committed). Node >= 20.

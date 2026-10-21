@@ -19,11 +19,13 @@ export function CopyRunId({ id }: { id: string }) {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <code className="select-all font-mono text-xs text-neutral-400">{id}</code>
+      <code className="select-all rounded-md bg-ink/5 px-2 py-1 font-mono text-xs text-muted">
+        {id}
+      </code>
       <button
         type="button"
         onClick={() => void copy()}
-        className="rounded border border-neutral-700 px-2 py-1 text-xs text-neutral-300 transition-colors hover:border-neutral-500 hover:text-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+        className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-muted transition-colors hover:border-ink/40 hover:text-ink"
         aria-live="polite"
       >
         {copied ? 'Copied' : 'Copy ID'}

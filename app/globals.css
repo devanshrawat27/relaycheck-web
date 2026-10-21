@@ -3,7 +3,33 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: theme('colors.paper');
+  background-image: radial-gradient(
+    1100px 420px at 50% -220px,
+    rgba(217, 80, 31, 0.1),
+    transparent 70%
+  );
+  background-repeat: no-repeat;
+}
+
+::selection {
+  background: theme('colors.ink');
+  color: theme('colors.paper');
+}
+
+/* Consistent, visible focus for keyboard users. */
+:focus-visible {
+  outline: 2px solid theme('colors.ember.DEFAULT');
+  outline-offset: 2px;
 }
 
 /* Respect users who prefer reduced motion (DESIGN.md accessibility rule). */

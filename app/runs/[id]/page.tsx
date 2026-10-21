@@ -31,38 +31,56 @@ function VerdictExplanation({
 }) {
   if (status === 'failed') {
     return (
-      <div className="rounded-lg border border-red-800/60 bg-red-950/30 px-4 py-3 text-sm">
-        <h2 className="font-semibold text-red-200">Assertion failure</h2>
-        <p className="mt-1 text-red-100/80">
-          Execution completed, but {failedAssertions.length} required assertion
-          {failedAssertions.length === 1 ? '' : 's'} did not pass. This is a product-behavior
+      <div className="rounded-2xl border border-danger/25 bg-danger-soft px-5 py-4 text-sm">
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-danger">
+          assertion failure
+        </p>
+        <h2 className="mt-1 text-base font-semibold text-ink">
+          Execution completed, but the behaviour is wrong
+        </h2>
+        <p className="mt-1 text-ink/75">
+          {failedAssertions.length} required assertion
+          {failedAssertions.length === 1 ? '' : 's'} did not pass. This is a product-behaviour
           failure, not an infrastructure problem.
         </p>
-        {summary ? <p className="mt-2 font-mono text-xs text-red-100/70">{summary}</p> : null}
+        {summary ? <p className="mt-2 font-mono text-xs text-ink/60">{summary}</p> : null}
       </div>
     );
   }
   if (status === 'error') {
     return (
-      <div className="rounded-lg border border-amber-800/60 bg-amber-950/30 px-4 py-3 text-sm">
-        <h2 className="font-semibold text-amber-200">Execution error</h2>
-        <p className="mt-1 text-amber-100/80">
-          The scenario could not complete reliably (an infrastructure or execution problem), so no
-          verdict was produced from assertions.
+      <div className="rounded-2xl border border-warn/25 bg-warn-soft px-5 py-4 text-sm">
+        <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-warn">
+          execution error
         </p>
-        {safeError ? <p className="mt-2 font-mono text-xs text-amber-100/70">{safeError}</p> : null}
+        <h2 className="mt-1 text-base font-semibold text-ink">
+          The scenario could not complete reliably
+        </h2>
+        <p className="mt-1 text-ink/75">
+          An infrastructure or execution problem prevented a verdict. This is not an assertion
+          failure.
+        </p>
+        {safeError ? <p className="mt-2 font-mono text-xs text-ink/60">{safeError}</p> : null}
       </div>
     );
   }
   return null;
 }
 
-function CountPanel({ label, value, hint }: { label: string; value: string; hint: string }) {
+function Stat({
+  label,
+  value,
+  hint,
+}: {
+  label: string;
+  value: string;
+  hint: string;
+}) {
   return (
-    <div className="rounded-lg border border-neutral-800 bg-neutral-900/40 px-4 py-3">
-      <p className="text-xs uppercase tracking-wide text-neutral-500">{label}</p>
-      <p className="mt-1 font-mono text-lg text-neutral-100">{value}</p>
-      <p className="mt-1 text-xs text-neutral-500">{hint}</p>
+    <div className="rounded-2xl border border-line bg-surface px-5 py-4 shadow-card">
+      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">{label}</p>
+      <p className="mt-2 font-mono text-2xl font-medium tracking-tight text-ink">{value}</p>
+      <p className="mt-1 text-xs text-muted">{hint}</p>
     </div>
   );
 }
@@ -101,23 +119,34 @@ export default async function RunDetailPage({ params }: RunDetailPageProps) {
 
   return (
     <article className="space-y-8">
-      <div className="space-y-3">
-        <Link
-          href="/"
-          className="text-xs text-neutral-400 underline-offset-4 hover:text-neutral-200 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
-        >
-          ← Back to runs
-        </Link>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-1">
-            <h1 className="text-2xl font-semibold tracking-tight">Run detail</h1>
-            <p className="font-mono text-xs text-neutral-400">{run.scenario}</p>
+      <Link
+        href="/"
+        className="text-xs text-muted underline-offset-4 hover:text-ink hover:underline"
+      >
+        ← Back to runs
+      </Link>
+
+      <header className="rounded-2xl border border-line bg-surface p-6 shadow-card sm:p-8">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+          <div className="space-y-3">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember">
+              RelayCheck / Run detail
+            </p>
+            <h1 className="text-3xl font-semibold leading-tight tracking-tight text-ink sm:text-4xl">
+              {run.scenario}
+            </h1>
+            <CopyRunId id={run.id} />
+            <RunPoller status={run.status} />
           </div>
-          <StatusBadge status={run.status} />
+          <StatusBadge status={run.status} size="lg" />
         </div>
-        <CopyRunId id={run.id} />
-        <RunPoller status={run.status} />
-      </div>
+
+        {run.summary ? (
+          <p className="mt-5 max-w-2xl border-t border-line/70 pt-4 text-sm leading-relaxed text-ink/80">
+            {run.summary}
+          </p>
+        ) : null}
+      </header>
 
       <VerdictExplanation
         status={run.status}
@@ -126,52 +155,61 @@ export default async function RunDetailPage({ params }: RunDetailPageProps) {
         failedAssertions={failedAssertions}
       />
 
-      <section aria-labelledby="counts-heading" className="space-y-3">
-        <h2 id="counts-heading" className="text-sm font-semibold text-neutral-200">
+      <section aria-labelledby="counts-heading" className="space-y-4">
+        <h2
+          id="counts-heading"
+          className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted"
+        >
           Measurement summary
         </h2>
-        <div className="grid gap-3 sm:grid-cols-3">
-          <CountPanel
+        <div className="grid gap-4 sm:grid-cols-3">
+          <Stat
             label="Delivery attempts"
             value={String(run.attempts.length)}
             hint="Sender-side HTTP deliveries recorded by the runner."
           />
-          <CountPanel
+          <Stat
             label="Business effects"
             value={effectAssertion ? effectAssertion.actual : '—'}
             hint="Receiver-side effects reported by the test oracle."
           />
-          <CountPanel
+          <Stat
             label="Duration"
             value={formatDuration(run.durationMs)}
             hint="From claim to finalize."
           />
         </div>
-        <dl className="grid gap-2 text-xs text-neutral-400 sm:grid-cols-3">
+        <dl className="flex flex-wrap gap-x-8 gap-y-2 text-xs text-muted">
           <div className="flex gap-2">
-            <dt>Created:</dt>
-            <dd className="text-neutral-300">{formatTimestamp(run.createdAt)}</dd>
+            <dt>Created</dt>
+            <dd className="font-mono text-ink/80">{formatTimestamp(run.createdAt)}</dd>
           </div>
           <div className="flex gap-2">
-            <dt>Started:</dt>
-            <dd className="text-neutral-300">{formatTimestamp(run.startedAt)}</dd>
+            <dt>Started</dt>
+            <dd className="font-mono text-ink/80">{formatTimestamp(run.startedAt)}</dd>
           </div>
           <div className="flex gap-2">
-            <dt>Finished:</dt>
-            <dd className="text-neutral-300">{formatTimestamp(run.finishedAt)}</dd>
+            <dt>Finished</dt>
+            <dd className="font-mono text-ink/80">{formatTimestamp(run.finishedAt)}</dd>
           </div>
         </dl>
       </section>
 
-      <section aria-labelledby="assertions-heading" className="space-y-3">
-        <h2 id="assertions-heading" className="text-sm font-semibold text-neutral-200">
+      <section aria-labelledby="assertions-heading" className="space-y-4">
+        <h2
+          id="assertions-heading"
+          className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted"
+        >
           Assertions
         </h2>
         <AssertionsTable assertions={run.assertions} />
       </section>
 
-      <section aria-labelledby="attempts-heading" className="space-y-3">
-        <h2 id="attempts-heading" className="text-sm font-semibold text-neutral-200">
+      <section aria-labelledby="attempts-heading" className="space-y-4">
+        <h2
+          id="attempts-heading"
+          className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted"
+        >
           Delivery attempts
         </h2>
         <AttemptsTable attempts={run.attempts} />

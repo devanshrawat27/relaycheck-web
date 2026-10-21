@@ -14,35 +14,37 @@ const STATUS_STYLES: Record<RunStatus, StatusStyle> = {
   queued: {
     label: 'Queued',
     icon: '•',
-    className: 'border-neutral-600 bg-neutral-800/40 text-neutral-300',
+    className: 'border-line bg-line/40 text-muted',
   },
   running: {
     label: 'Running',
     icon: '↻',
-    className: 'border-sky-600/60 bg-sky-950/40 text-sky-300',
+    className: 'border-info/20 bg-info-soft text-info',
   },
   passed: {
     label: 'Passed',
     icon: '✓',
-    className: 'border-emerald-600/60 bg-emerald-950/40 text-emerald-300',
+    className: 'border-success/20 bg-success-soft text-success',
   },
   failed: {
     label: 'Failed',
     icon: '✕',
-    className: 'border-red-600/60 bg-red-950/40 text-red-300',
+    className: 'border-danger/20 bg-danger-soft text-danger',
   },
   error: {
     label: 'Error',
     icon: '!',
-    className: 'border-amber-600/60 bg-amber-950/40 text-amber-300',
+    className: 'border-warn/20 bg-warn-soft text-warn',
   },
 };
 
-export function StatusBadge({ status }: { status: RunStatus }) {
+export function StatusBadge({ status, size = 'md' }: { status: RunStatus; size?: 'md' | 'lg' }) {
   const style = STATUS_STYLES[status];
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium ${style.className}`}
+      className={`inline-flex items-center gap-2 rounded-full border font-semibold ${style.className} ${
+        size === 'lg' ? 'px-4 py-2 text-sm' : 'px-2.5 py-1 text-xs'
+      }`}
     >
       <span aria-hidden="true" className="font-mono leading-none">
         {style.icon}

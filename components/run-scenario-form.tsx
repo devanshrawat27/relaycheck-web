@@ -1,23 +1,23 @@
 import { createRunAction } from '@/lib/actions';
 
-const SCENARIOS: { value: string; label: string; description: string }[] = [
+const SCENARIOS: { value: string; label: string; description: string; expected: string }[] = [
   {
     value: 'duplicate_delivery',
     label: 'Duplicate delivery',
-    description:
-      'Sends the same event ID 3 times. Expects 3 attempts and exactly 1 business effect.',
+    description: 'The same event ID is delivered three times to the receiver.',
+    expected: 'Expects 3 attempts and exactly 1 business effect.',
   },
   {
     value: 'receiver_failure',
     label: 'Controlled receiver failure',
-    description:
-      'Makes the receiver return a controlled 503. Expects that error and no business effect.',
+    description: 'The receiver is made to return a controlled 503.',
+    expected: 'Expects that error and no business effect.',
   },
   {
     value: 'receiver_timeout',
     label: 'Receiver timeout',
-    description:
-      'Makes the receiver respond slower than the client timeout. Expects a recorded timeout attempt.',
+    description: 'The receiver is made to respond slower than the client timeout.',
+    expected: 'Expects a recorded timeout attempt.',
   },
 ];
 
@@ -27,72 +27,81 @@ const SCENARIOS: { value: string; label: string; description: string }[] = [
  */
 export function RunScenarioForm() {
   return (
-    <form action={createRunAction} className="space-y-6">
-      <div className="space-y-2">
-        <label htmlFor="scenario" className="block text-sm font-medium text-neutral-200">
-          Scenario
-        </label>
-        <select
-          id="scenario"
-          name="scenario"
-          defaultValue="duplicate_delivery"
-          aria-describedby="scenario-help"
-          className="w-full rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400 sm:max-w-sm"
-        >
-          {SCENARIOS.map((scenario) => (
-            <option key={scenario.value} value={scenario.value}>
-              {scenario.label}
-            </option>
+    <form action={createRunAction} className="space-y-8">
+      <fieldset className="space-y-4">
+        <legend className="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+          Choose a scenario
+        </legend>
+        <div className="grid gap-3">
+          {SCENARIOS.map((scenario, index) => (
+            <label key={scenario.value} className="block cursor-pointer">
+              <input
+                type="radio"
+                name="scenario"
+                value={scenario.value}
+                defaultChecked={index === 0}
+                className="peer sr-only"
+              />
+              <span className="flex items-start justify-between gap-5 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors peer-checked:border-ink peer-checked:bg-ink peer-checked:text-paper peer-checked:[&>span:last-child]:opacity-100 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ember hover:border-ink/40">
+                <span className="space-y-1.5">
+                  <span className="block text-sm font-semibold">{scenario.label}</span>
+                  <span className="block text-xs leading-relaxed opacity-70">
+                    {scenario.description}
+                  </span>
+                  <span className="block pt-1 font-mono text-[11px] uppercase tracking-[0.12em] opacity-60">
+                    {scenario.expected}
+                  </span>
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="mt-1 h-4 w-4 shrink-0 rounded-full border-2 border-current opacity-30"
+                />
+              </span>
+            </label>
           ))}
-        </select>
-        <p id="scenario-help" className="text-xs text-neutral-400">
-          Sends the same event three times and verifies the receiver applies one business effect.
-        </p>
-      </div>
+        </div>
+      </fieldset>
 
       <section
         aria-labelledby="preview-heading"
-        className="rounded-lg border border-neutral-800 bg-neutral-900/40 px-4 py-4"
+        className="rounded-2xl border border-line bg-surface p-5 shadow-card"
       >
-        <h2 id="preview-heading" className="text-sm font-semibold text-neutral-200">
-          Planned behavior
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Bounded by design</p>
+        <h2 id="preview-heading" className="mt-1 text-base font-semibold text-ink">
+          What every run guarantees
         </h2>
-        <dl className="mt-3 space-y-3 text-sm">
-          {SCENARIOS.map((scenario) => (
-            <div key={scenario.value} className="grid gap-1 sm:grid-cols-[180px_1fr] sm:gap-3">
-              <dt className="text-neutral-300">{scenario.label}</dt>
-              <dd className="text-neutral-400">{scenario.description}</dd>
-            </div>
-          ))}
+        <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-3">
+          <div>
+            <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">Target</dt>
+            <dd className="mt-1 text-ink/80">Fixed local demo receiver, chosen server-side</dd>
+          </div>
+          <div>
+            <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
+              Parameters
+            </dt>
+            <dd className="mt-1 text-ink/80">Generated per run — never user-controlled</dd>
+          </div>
+          <div>
+            <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">Bounds</dt>
+            <dd className="mt-1 text-ink/80">Bounded attempts, timeouts, and retries</dd>
+          </div>
         </dl>
-        <div className="mt-4 border-t border-neutral-800 pt-3">
-          <dl className="grid gap-2 text-xs text-neutral-500 sm:grid-cols-3">
-            <div>
-              <dt className="text-neutral-500">Target</dt>
-              <dd className="text-neutral-400">Fixed local demo receiver (server-side)</dd>
-            </div>
-            <div>
-              <dt className="text-neutral-500">Parameters</dt>
-              <dd className="text-neutral-400">Generated by RelayCheck per scenario</dd>
-            </div>
-            <div>
-              <dt className="text-neutral-500">Bounds</dt>
-              <dd className="text-neutral-400">Bounded attempts and timeouts</dd>
-            </div>
-          </dl>
-        </div>
-        <p className="mt-3 text-xs text-neutral-500">
-          Destination and parameters are chosen by RelayCheck. The form cannot target any other
-          host.
+        <p className="mt-4 border-t border-line/70 pt-3 text-xs text-muted">
+          The form cannot target any other host. Fault scenarios require the receiver to run in
+          test mode.
         </p>
       </section>
 
-      <button
-        type="submit"
-        className="inline-flex items-center rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-emerald-950 transition-colors hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
-      >
-        Start run
-      </button>
+      <div className="flex flex-wrap items-center gap-4">
+        <button
+          type="submit"
+          className="inline-flex items-center gap-2 rounded-full bg-ember px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-ink"
+        >
+          Start run
+          <span aria-hidden="true">→</span>
+        </button>
+        <p className="text-xs text-muted">Creates a queued run and returns to the history.</p>
+      </div>
     </form>
   );
 }
