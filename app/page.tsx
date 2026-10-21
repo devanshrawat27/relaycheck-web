@@ -1,7 +1,13 @@
+import { RunFilters } from '@/components/run-filters';
 import { StatusBadge } from '@/components/status-badge';
-import { getRuns, type RunListItem } from '@/lib/api';
+import { getRuns, isRunStatus, type RunListItem, type RunStatus } from '@/lib/api';
+import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
+
+interface OverviewPageProps {
+  searchParams?: { status?: string | string[] };
+}
 
 function formatTimestamp(iso: string): string {
   return new Date(iso).toLocaleString('en-GB', {
@@ -71,7 +77,25 @@ function RunsTable({ runs }: { runs: RunListItem[] }) {
   );
 }
 
-function EmptyState() {
+function EmptyState({ filtered }: { filtered: boolean }) {
+  if (filtered) {
+    return (
+      <div className="rounded-lg border border-dashed border-neutral-700 px-6 py-10 text-center">
+        <h2 className="text-sm font-semibold text-neutral-200">No runs match this filter</h2>
+        <p className="mt-2 text-sm text-neutral-400">
+          Try a different status, or{' '}
+          <Link
+            href="/"
+            className="text-emerald-300 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+          >
+            show all runs
+          </Link>
+          .
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-lg border border-dashed border-neutral-700 px-6 py-10 text-center">
       <h2 className="text-sm font-semibold text-neutral-200">No runs recorded yet</h2>
@@ -98,12 +122,17 @@ function ErrorPanel({ message }: { message: string }) {
   );
 }
 
-export default async function RunsOverviewPage() {
+export default async function RunsOverviewPage({ searchParams }: OverviewPageProps) {
+  const requested = Array.isArray(searchParams?.status)
+    ? searchParams?.status[0]
+    : searchParams?.status;
+  const status: RunStatus | undefined = isRunStatus(requested) ? requested : undefined;
+
   let runs: RunListItem[] = [];
   let errorMessage: string | null = null;
 
   try {
-    runs = await getRuns(20);
+    runs = await getRuns({ take: 20, status });
   } catch (error) {
     errorMessage = error instanceof Error ? error.message : 'Unknown error';
   }
@@ -119,10 +148,12 @@ export default async function RunsOverviewPage() {
         </p>
       </div>
 
+      <RunFilters active={status} />
+
       {errorMessage ? (
         <ErrorPanel message={errorMessage} />
       ) : runs.length === 0 ? (
-        <EmptyState />
+        <EmptyState filtered={status !== undefined} />
       ) : (
         <RunsTable runs={runs} />
       )}
