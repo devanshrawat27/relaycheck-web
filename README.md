@@ -15,13 +15,27 @@ API-error states. No fabricated rows anywhere.
 app/
   layout.tsx      # shell: skip link, header/nav, main, footer
   page.tsx        # Runs overview (server-rendered from the Control API)
+  loading.tsx     # route-level loading skeleton
+  runs/new/       # Run a scenario form
   globals.css     # Tailwind entry + reduced-motion support
 components/
-  nav-link.tsx    # accessible nav item with aria-current
-  status-badge.tsx# queued/running/passed/failed/error: label + icon + color
+  nav-link.tsx         # accessible nav item with aria-current
+  run-filters.tsx      # server-rendered status filter links
+  run-scenario-form.tsx# progressive-enhancement form (server action)
+  status-badge.tsx     # queued/running/passed/failed/error: label + icon + color
 lib/
   api.ts          # typed server-side Control API client
+  actions.ts      # server action: validate scenario -> POST /api/runs
 ```
+
+## Run form
+
+`/runs/new` exposes exactly one input — the scenario selector. It shows a
+"Planned behavior" preview (3 deliveries, same event ID, fixed local target,
+bounded timeout, one business effect). There is no destination URL field and
+unknown scenarios are rejected server-side (redirect with an inline error).
+The form is a plain server action, so it works without client JavaScript;
+verified end-to-end: submitting creates a real `queued` run.
 
 ## Design rules followed (`DESIGN.md`)
 

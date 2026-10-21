@@ -139,13 +139,21 @@ export default async function RunsOverviewPage({ searchParams }: OverviewPagePro
 
   return (
     <section aria-labelledby="runs-heading" className="space-y-6">
-      <div className="space-y-1">
-        <h1 id="runs-heading" className="text-2xl font-semibold tracking-tight">
-          Runs
-        </h1>
-        <p className="text-sm text-neutral-400">
-          Recent scenario runs persisted by the RelayCheck Control API.
-        </p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-1">
+          <h1 id="runs-heading" className="text-2xl font-semibold tracking-tight">
+            Runs
+          </h1>
+          <p className="text-sm text-neutral-400">
+            Recent scenario runs persisted by the RelayCheck Control API.
+          </p>
+        </div>
+        <Link
+          href="/runs/new"
+          className="inline-flex shrink-0 items-center rounded-md bg-emerald-500 px-4 py-2 text-sm font-semibold text-emerald-950 transition-colors hover:bg-emerald-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-300"
+        >
+          Run a scenario
+        </Link>
       </div>
 
       <RunFilters active={status} />
