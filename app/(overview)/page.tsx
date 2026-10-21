@@ -1,3 +1,4 @@
+import { ErrorPanel } from '@/components/error-panel';
 import { RunFilters } from '@/components/run-filters';
 import { StatusBadge } from '@/components/status-badge';
 import { getRuns, isRunStatus, type RunListItem, type RunStatus } from '@/lib/api';
@@ -54,8 +55,14 @@ function RunsTable({ runs }: { runs: RunListItem[] }) {
           {runs.map((run) => (
             <tr key={run.id} className="border-b border-neutral-800/60 last:border-b-0">
               <td className="px-4 py-3 font-mono text-xs text-neutral-300">{run.scenario}</td>
-              <td className="px-4 py-3 font-mono text-xs text-neutral-500" title={run.id}>
-                {run.id.slice(0, 8)}
+              <td className="px-4 py-3 font-mono text-xs">
+                <Link
+                  href={`/runs/${run.id}`}
+                  className="text-emerald-300 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-400"
+                  title={run.id}
+                >
+                  {run.id.slice(0, 8)}
+                </Link>
               </td>
               <td className="px-4 py-3">
                 <StatusBadge status={run.status} />
@@ -107,21 +114,6 @@ function EmptyState({ filtered }: { filtered: boolean }) {
   );
 }
 
-function ErrorPanel({ message }: { message: string }) {
-  return (
-    <div
-      role="alert"
-      className="rounded-lg border border-amber-700/60 bg-amber-950/30 px-4 py-4 text-sm"
-    >
-      <h2 className="font-semibold text-amber-200">Could not reach the Control API</h2>
-      <p className="mt-1 text-amber-100/80">{message}</p>
-      <p className="mt-2 text-xs text-amber-100/60">
-        Start the Control API (default http://localhost:3200) and reload this page.
-      </p>
-    </div>
-  );
-}
-
 export default async function RunsOverviewPage({ searchParams }: OverviewPageProps) {
   const requested = Array.isArray(searchParams?.status)
     ? searchParams?.status[0]
@@ -159,7 +151,11 @@ export default async function RunsOverviewPage({ searchParams }: OverviewPagePro
       <RunFilters active={status} />
 
       {errorMessage ? (
-        <ErrorPanel message={errorMessage} />
+        <ErrorPanel
+          title="Could not reach the Control API"
+          message={errorMessage}
+          hint="Start the Control API (default http://localhost:3200) and reload this page."
+        />
       ) : runs.length === 0 ? (
         <EmptyState filtered={status !== undefined} />
       ) : (

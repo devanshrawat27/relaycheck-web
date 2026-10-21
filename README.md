@@ -9,6 +9,19 @@ shell, navigation, typed server-side API client, status components, and a
 runs overview that renders **real** Control API data with explicit empty and
 API-error states. No fabricated rows anywhere.
 
+## Run detail
+
+`/runs/[id]` shows the final verdict prominently plus verdict-specific
+explanations: `failed` says execution completed but assertions failed;
+`error` says execution could not complete reliably and shows the safe error.
+It includes a measurement summary that keeps **delivery attempts** (sender)
+and **business effects** (receiver, expected 1) separate, assertion results
+with expected vs actual values, the delivery-attempts table
+(number/eventId/HTTP status/outcome/duration/detail), created/started/
+finished timestamps, a copyable run ID, and a bounded auto-refresh (2-second
+interval, ~2 minutes max) that stops once the run is terminal. Unknown IDs
+return a real HTTP 404 with a not-found page.
+
 ## Structure
 
 ```text
