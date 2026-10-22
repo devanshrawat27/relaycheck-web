@@ -22,6 +22,13 @@ finished timestamps, a copyable run ID, and a bounded auto-refresh (2-second
 interval, ~2 minutes max) that stops once the run is terminal. Unknown IDs
 return a real HTTP 404 with a not-found page.
 
+## Diagnostics
+
+`/diagnostics` shows live service health (Control API, demo receiver) and the
+aggregate metrics from `GET /api/metrics`: runs by status, work/dead-letter
+queue depth, and outbox backlog with the age of the oldest pending job. It is
+read-only and shows counts only — never payloads.
+
 ## Structure
 
 ```text
@@ -75,7 +82,8 @@ touches PostgreSQL or RabbitMQ.
 - `npm run lint` / `npm run type-check` — static checks.
 - `npm test` — Jest + React Testing Library component tests: status badges,
   API-error panel, evidence tables, status filters, run form (scenario
-  options + no destination input), and the Control API client.
+  options + no destination input), and the Control API client (runs, detail,
+  metrics).
 - `npm run build` / `npm start` — production build and server on port 3000.
 
 Package manager: **npm** (lockfiles are committed). Node >= 20.

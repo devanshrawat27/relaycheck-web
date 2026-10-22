@@ -1,4 +1,4 @@
-import { getRun, getRuns } from '@/lib/api';
+import { getMetrics, getRun, getRuns } from '@/lib/api';
 
 const originalFetch = global.fetch;
 
@@ -53,6 +53,24 @@ describe('Control API client', () => {
   it('returns null for a missing run (404)', async () => {
     mockFetchOnce({ ok: false, status: 404 });
     await expect(getRun('missing')).resolves.toBeNull();
+  });
+
+  it('fetches aggregate operational metrics', async () => {
+    mockFetchOnce({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        runs: { queued: 1, running: 0, passed: 2, failed: 0, error: 0 },
+        outbox: { pending: 0, sending: 0, failed: 0, oldestPendingAgeMs: null },
+        queues: { work: 0, deadLetter: 0 },
+        generatedAt: '2026-10-22T00:00:00.000Z',
+      }),
+    });
+
+    const metrics = await getMetrics();
+    expect(metrics.runs.passed).toBe(2);
+    expect(metrics.queues.deadLetter).toBe(0);
+    expect((global.fetch as jest.Mock).mock.calls[0][0] as string).toContain('/api/metrics');
   });
 
   it('returns run detail when found', async () => {

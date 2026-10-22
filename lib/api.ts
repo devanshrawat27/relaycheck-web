@@ -78,6 +78,40 @@ export function isRunStatus(value: unknown): value is RunStatus {
   return typeof value === 'string' && (RUN_STATUSES as string[]).includes(value);
 }
 
+export interface MetricsResponse {
+  runs: Record<string, number>;
+  outbox: {
+    pending: number;
+    sending: number;
+    failed: number;
+    oldestPendingAgeMs: number | null;
+  };
+  queues: { work: number; deadLetter: number };
+  generatedAt: string;
+}
+
+/** Aggregate operational metrics (counts only). */
+export async function getMetrics(): Promise<MetricsResponse> {
+  const response = await fetch(`${BASE_URL}/api/metrics`, {
+    cache: 'no-store',
+    headers: { accept: 'application/json', ...authHeaders() },
+  });
+  if (!response.ok) {
+    throw new Error(`Control API responded with HTTP ${response.status}`);
+  }
+  return (await response.json()) as MetricsResponse;
+}
+
+/** Best-effort service health probe for the diagnostics page. */
+export async function isServiceHealthy(url: string): Promise<boolean> {
+  try {
+    const response = await fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(2500) });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
 /** Run detail, or null when the run does not exist (404). */
 export async function getRun(id: string): Promise<RunDetail | null> {
   const response = await fetch(`${BASE_URL}/api/runs/${encodeURIComponent(id)}`, {
