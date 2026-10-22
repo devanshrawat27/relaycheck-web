@@ -1,13 +1,18 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { NavLink } from '@/components/nav-link';
+import { logoutAction } from '@/lib/auth-actions';
+import { getAuthState } from '@/lib/session';
 
 export const metadata: Metadata = {
   title: 'RelayCheck',
   description: 'Repeatable webhook scenario tests that verify business outcomes.',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const auth = await getAuthState();
+  const signedIn = auth.user !== null;
+
   return (
     <html lang="en" className="h-full">
       <body className="flex min-h-full flex-col bg-paper font-sans text-ink antialiased">
@@ -21,27 +26,50 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <header className="sticky top-0 z-40 border-b border-line/70 bg-paper/80 backdrop-blur">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8">
             <a href="/" className="group flex items-baseline gap-2">
-              <span className="text-lg font-semibold tracking-tight text-ink">
-                RelayCheck
-              </span>
+              <span className="text-lg font-semibold tracking-tight text-ink">RelayCheck</span>
               <span className="h-1.5 w-1.5 rounded-full bg-ember transition-transform group-hover:scale-150" />
               <span className="hidden text-[11px] uppercase tracking-[0.18em] text-muted sm:inline">
                 webhook regression lab
               </span>
             </a>
-            <nav aria-label="Primary">
-              <ul className="flex items-center gap-1">
-                <li>
-                  <NavLink href="/">Runs</NavLink>
-                </li>
-                <li>
-                  <NavLink href="/runs/new">Run a scenario</NavLink>
-                </li>
-                <li>
-                  <NavLink href="/diagnostics">Diagnostics</NavLink>
-                </li>
-              </ul>
-            </nav>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <nav aria-label="Primary">
+                <ul className="flex flex-wrap items-center gap-1">
+                  {signedIn || !auth.authRequired ? (
+                    <>
+                      <li>
+                        <NavLink href="/">Runs</NavLink>
+                      </li>
+                      <li>
+                        <NavLink href="/runs/new">Run a scenario</NavLink>
+                      </li>
+                      <li>
+                        <NavLink href="/diagnostics">Diagnostics</NavLink>
+                      </li>
+                    </>
+                  ) : null}
+                </ul>
+              </nav>
+
+              {signedIn ? (
+                <div className="flex items-center gap-3 border-l border-line pl-3">
+                  <span className="max-w-[180px] truncate text-xs text-muted" title={auth.user?.email}>
+                    {auth.user?.email}
+                  </span>
+                  <form action={logoutAction}>
+                    <button
+                      type="submit"
+                      className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:border-ink/40 hover:text-ink"
+                    >
+                      Sign out
+                    </button>
+                  </form>
+                </div>
+              ) : auth.authRequired ? (
+                <NavLink href="/login">Sign in</NavLink>
+              ) : null}
+            </div>
           </div>
         </header>
 

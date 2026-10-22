@@ -17,8 +17,9 @@ export interface RunsListResponse {
 const BASE_URL = (process.env.CONTROL_API_URL ?? 'http://localhost:3200').replace(/\/$/, '');
 const API_TOKEN = process.env.API_AUTH_TOKEN;
 
-function authHeaders(): Record<string, string> {
-  return API_TOKEN ? { authorization: `Bearer ${API_TOKEN}` } : {};
+function authHeaders(token?: string): Record<string, string> {
+  const bearer = token ?? API_TOKEN;
+  return bearer ? { authorization: `Bearer ${bearer}` } : {};
 }
 
 export interface RunsPage {
@@ -32,6 +33,7 @@ export interface RunsPage {
  */
 export async function getRunsPage(
   options: { take?: number; status?: RunStatus; cursor?: string } = {},
+  token?: string,
 ): Promise<RunsPage> {
   const params = new URLSearchParams();
   params.set('take', String(options.take ?? 20));
@@ -43,7 +45,7 @@ export async function getRunsPage(
   }
   const response = await fetch(`${BASE_URL}/api/runs?${params.toString()}`, {
     cache: 'no-store',
-    headers: { accept: 'application/json', ...authHeaders() },
+    headers: { accept: 'application/json', ...authHeaders(token) },
   });
   if (!response.ok) {
     throw new Error(`Control API responded with HTTP ${response.status}`);
@@ -100,10 +102,10 @@ export interface MetricsResponse {
 }
 
 /** Aggregate operational metrics (counts only). */
-export async function getMetrics(): Promise<MetricsResponse> {
+export async function getMetrics(token?: string): Promise<MetricsResponse> {
   const response = await fetch(`${BASE_URL}/api/metrics`, {
     cache: 'no-store',
-    headers: { accept: 'application/json', ...authHeaders() },
+    headers: { accept: 'application/json', ...authHeaders(token) },
   });
   if (!response.ok) {
     throw new Error(`Control API responded with HTTP ${response.status}`);
@@ -122,10 +124,10 @@ export async function isServiceHealthy(url: string): Promise<boolean> {
 }
 
 /** Run detail, or null when the run does not exist (404). */
-export async function getRun(id: string): Promise<RunDetail | null> {
+export async function getRun(id: string, token?: string): Promise<RunDetail | null> {
   const response = await fetch(`${BASE_URL}/api/runs/${encodeURIComponent(id)}`, {
     cache: 'no-store',
-    headers: { accept: 'application/json', ...authHeaders() },
+    headers: { accept: 'application/json', ...authHeaders(token) },
   });
   if (response.status === 404) {
     return null;
@@ -135,4 +137,5 @@ export async function getRun(id: string): Promise<RunDetail | null> {
   }
   return (await response.json()) as RunDetail;
 }
+
 

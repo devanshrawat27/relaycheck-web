@@ -6,6 +6,7 @@ import { AssertionsTable, AttemptsTable, formatDuration } from '@/components/evi
 import { RunPoller } from '@/components/run-poller';
 import { StatusBadge } from '@/components/status-badge';
 import { getRun, type AssertionResult } from '@/lib/api';
+import { requireSession } from '@/lib/session';
 
 export const dynamic = 'force-dynamic';
 
@@ -90,11 +91,12 @@ interface RunDetailPageProps {
 }
 
 export default async function RunDetailPage({ params }: RunDetailPageProps) {
+  const { token } = await requireSession();
   let run;
   let errorMessage: string | null = null;
 
   try {
-    run = await getRun(params.id);
+    run = await getRun(params.id, token);
   } catch (error) {
     errorMessage = error instanceof Error ? error.message : 'Unknown error';
     run = null;
@@ -217,3 +219,4 @@ export default async function RunDetailPage({ params }: RunDetailPageProps) {
     </article>
   );
 }
+

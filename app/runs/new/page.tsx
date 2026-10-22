@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { RunScenarioForm } from '@/components/run-scenario-form';
+import { requireSession } from '@/lib/session';
 
 const ERROR_MESSAGES: Record<string, string> = {
   'unsupported-scenario': 'Choose one of the supported scenarios.',
@@ -11,7 +12,8 @@ interface NewRunPageProps {
   searchParams?: { error?: string | string[] };
 }
 
-export default function NewRunPage({ searchParams }: NewRunPageProps) {
+export default async function NewRunPage({ searchParams }: NewRunPageProps) {
+  await requireSession();
   const raw = Array.isArray(searchParams?.error) ? searchParams?.error[0] : searchParams?.error;
   const errorMessage = raw ? (ERROR_MESSAGES[raw] ?? 'The run could not be started.') : null;
 
@@ -51,3 +53,4 @@ export default function NewRunPage({ searchParams }: NewRunPageProps) {
     </section>
   );
 }
+

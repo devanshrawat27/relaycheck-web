@@ -1,5 +1,6 @@
 import { ErrorPanel } from '@/components/error-panel';
 import { getMetrics, isServiceHealthy, type MetricsResponse } from '@/lib/api';
+import { requireSession } from '@/lib/session';
 
 export const dynamic = 'force-dynamic';
 
@@ -63,6 +64,7 @@ function formatAge(ageMs: number | null): string {
 }
 
 export default async function DiagnosticsPage() {
+  const { token } = await requireSession();
   const [apiHealthy, receiverHealthy] = await Promise.all([
     isServiceHealthy(`${API_BASE}/api/health`),
     isServiceHealthy(`${RECEIVER_BASE}/api/health`),
@@ -71,7 +73,7 @@ export default async function DiagnosticsPage() {
   let metrics: MetricsResponse | null = null;
   let errorMessage: string | null = null;
   try {
-    metrics = await getMetrics();
+    metrics = await getMetrics(token);
   } catch (error) {
     errorMessage = error instanceof Error ? error.message : 'Unknown error';
   }
@@ -165,3 +167,4 @@ export default async function DiagnosticsPage() {
     </section>
   );
 }
+

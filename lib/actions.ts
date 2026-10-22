@@ -1,6 +1,7 @@
 'use server';
 
 import { redirect } from 'next/navigation';
+import { sessionToken } from './session';
 
 const SUPPORTED_SCENARIOS = ['duplicate_delivery', 'receiver_failure', 'receiver_timeout'] as const;
 
@@ -24,7 +25,7 @@ export async function createRunAction(formData: FormData): Promise<void> {
   }
 
   const baseUrl = (process.env.CONTROL_API_URL ?? 'http://localhost:3200').replace(/\/$/, '');
-  const apiToken = process.env.API_AUTH_TOKEN;
+  const apiToken = sessionToken() ?? process.env.API_AUTH_TOKEN;
 
   let response: Response;
   try {
@@ -47,3 +48,4 @@ export async function createRunAction(formData: FormData): Promise<void> {
 
   redirect('/');
 }
+

@@ -3,6 +3,7 @@ import { ErrorPanel } from '@/components/error-panel';
 import { RunFilters } from '@/components/run-filters';
 import { StatusBadge } from '@/components/status-badge';
 import { getRunsPage, isRunStatus, type RunListItem, type RunStatus } from '@/lib/api';
+import { requireSession } from '@/lib/session';
 
 export const dynamic = 'force-dynamic';
 
@@ -124,12 +125,14 @@ export default async function RunsOverviewPage({ searchParams }: OverviewPagePro
     ? searchParams?.cursor[0]
     : searchParams?.cursor;
 
+  const { token } = await requireSession();
+
   let runs: RunListItem[] = [];
   let nextCursor: string | null = null;
   let errorMessage: string | null = null;
 
   try {
-    const page = await getRunsPage({ take: 20, status, cursor });
+    const page = await getRunsPage({ take: 20, status, cursor }, token);
     runs = page.items;
     nextCursor = page.nextCursor;
   } catch (error) {
@@ -201,3 +204,4 @@ export default async function RunsOverviewPage({ searchParams }: OverviewPagePro
     </section>
   );
 }
+

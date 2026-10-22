@@ -9,6 +9,15 @@ shell, navigation, typed server-side API client, status components, and a
 runs overview that renders **real** Control API data with explicit empty and
 API-error states. No fabricated rows anywhere.
 
+## Accounts
+
+When the Control API runs with `AUTH_REQUIRED=true`, the dashboard shows
+Sign in / Create account pages. Login and registration use server actions
+that call the API and store the opaque session token in an httpOnly cookie;
+server-side data fetches forward it as a bearer token. Runs are scoped to the
+user's workspace, and the header shows the signed-in email with Sign out.
+In local mode (auth disabled) no login is required.
+
 ## Run detail
 
 `/runs/[id]` shows the final verdict prominently plus verdict-specific
