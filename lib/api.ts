@@ -15,6 +15,11 @@ export interface RunsListResponse {
 }
 
 const BASE_URL = (process.env.CONTROL_API_URL ?? 'http://localhost:3200').replace(/\/$/, '');
+const API_TOKEN = process.env.API_AUTH_TOKEN;
+
+function authHeaders(): Record<string, string> {
+  return API_TOKEN ? { authorization: `Bearer ${API_TOKEN}` } : {};
+}
 
 /**
  * Server-side client for the Control API. The dashboard never talks to
@@ -28,7 +33,7 @@ export async function getRuns(options: { take?: number; status?: RunStatus } = {
   }
   const response = await fetch(`${BASE_URL}/api/runs?${params.toString()}`, {
     cache: 'no-store',
-    headers: { accept: 'application/json' },
+    headers: { accept: 'application/json', ...authHeaders() },
   });
   if (!response.ok) {
     throw new Error(`Control API responded with HTTP ${response.status}`);
@@ -77,7 +82,7 @@ export function isRunStatus(value: unknown): value is RunStatus {
 export async function getRun(id: string): Promise<RunDetail | null> {
   const response = await fetch(`${BASE_URL}/api/runs/${encodeURIComponent(id)}`, {
     cache: 'no-store',
-    headers: { accept: 'application/json' },
+    headers: { accept: 'application/json', ...authHeaders() },
   });
   if (response.status === 404) {
     return null;
@@ -87,3 +92,4 @@ export async function getRun(id: string): Promise<RunDetail | null> {
   }
   return (await response.json()) as RunDetail;
 }
+

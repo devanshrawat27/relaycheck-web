@@ -24,12 +24,16 @@ export async function createRunAction(formData: FormData): Promise<void> {
   }
 
   const baseUrl = (process.env.CONTROL_API_URL ?? 'http://localhost:3200').replace(/\/$/, '');
+  const apiToken = process.env.API_AUTH_TOKEN;
 
   let response: Response;
   try {
     response = await fetch(`${baseUrl}/api/runs`, {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: {
+        'content-type': 'application/json',
+        ...(apiToken ? { authorization: `Bearer ${apiToken}` } : {}),
+      },
       body: JSON.stringify({ scenario }),
       cache: 'no-store',
     });
