@@ -48,6 +48,13 @@ lib/
   actions.ts      # server action: validate scenario -> POST /api/runs
 ```
 
+## Runs overview
+
+The overview renders real Control API data with a status filter and
+cursor-based pagination ("Load older runs"); unknown filters fall back to
+All. Loading, empty (no runs vs no matches), and API-error states are
+implemented.
+
 ## Run form
 
 `/runs/new` exposes exactly one input — the scenario selector — with three

@@ -2,12 +2,12 @@ import Link from 'next/link';
 import { ErrorPanel } from '@/components/error-panel';
 import { RunFilters } from '@/components/run-filters';
 import { StatusBadge } from '@/components/status-badge';
-import { getRuns, isRunStatus, type RunListItem, type RunStatus } from '@/lib/api';
+import { getRunsPage, isRunStatus, type RunListItem, type RunStatus } from '@/lib/api';
 
 export const dynamic = 'force-dynamic';
 
 interface OverviewPageProps {
-  searchParams?: { status?: string | string[] };
+  searchParams?: { status?: string | string[]; cursor?: string | string[] };
 }
 
 function formatTimestamp(iso: string): string {
@@ -120,12 +120,18 @@ export default async function RunsOverviewPage({ searchParams }: OverviewPagePro
     ? searchParams?.status[0]
     : searchParams?.status;
   const status: RunStatus | undefined = isRunStatus(requested) ? requested : undefined;
+  const cursor = Array.isArray(searchParams?.cursor)
+    ? searchParams?.cursor[0]
+    : searchParams?.cursor;
 
   let runs: RunListItem[] = [];
+  let nextCursor: string | null = null;
   let errorMessage: string | null = null;
 
   try {
-    runs = await getRuns({ take: 20, status });
+    const page = await getRunsPage({ take: 20, status, cursor });
+    runs = page.items;
+    nextCursor = page.nextCursor;
   } catch (error) {
     errorMessage = error instanceof Error ? error.message : 'Unknown error';
   }
@@ -172,9 +178,24 @@ export default async function RunsOverviewPage({ searchParams }: OverviewPagePro
             hint="Start the Control API (default http://localhost:3200) and reload this page."
           />
         ) : runs.length === 0 ? (
-          <EmptyState filtered={status !== undefined} />
+          <EmptyState filtered={status !== undefined || cursor !== undefined} />
         ) : (
-          <RunsTable runs={runs} />
+          <div className="space-y-4">
+            <RunsTable runs={runs} />
+            {nextCursor ? (
+              <div className="flex justify-center">
+                <Link
+                  href={`/?${new URLSearchParams({
+                    ...(status ? { status } : {}),
+                    cursor: nextCursor,
+                  }).toString()}`}
+                  className="inline-flex items-center rounded-full border border-line bg-surface px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:border-ink/40"
+                >
+                  Load older runs
+                </Link>
+              </div>
+            ) : null}
+          </div>
         )}
       </div>
     </section>

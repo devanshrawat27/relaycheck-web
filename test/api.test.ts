@@ -1,4 +1,4 @@
-import { getMetrics, getRun, getRuns } from '@/lib/api';
+import { getMetrics, getRun, getRunsPage } from '@/lib/api';
 
 const originalFetch = global.fetch;
 
@@ -35,7 +35,8 @@ describe('Control API client', () => {
       }),
     });
 
-    const runs = await getRuns({ take: 5, status: 'passed' });
+    const page = await getRunsPage({ take: 5, status: 'passed' });
+    const runs = page.items;
     expect(runs).toHaveLength(1);
     expect(runs[0]?.id).toBe('run-1');
 
@@ -47,7 +48,7 @@ describe('Control API client', () => {
 
   it('throws a meaningful error when the Control API fails', async () => {
     mockFetchOnce({ ok: false, status: 500 });
-    await expect(getRuns()).rejects.toThrow('Control API responded with HTTP 500');
+    await expect(getRunsPage()).rejects.toThrow('Control API responded with HTTP 500');
   });
 
   it('returns null for a missing run (404)', async () => {
@@ -97,3 +98,4 @@ describe('Control API client', () => {
     expect(run?.scenario).toBe('receiver_failure');
   });
 });
+

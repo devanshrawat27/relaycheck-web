@@ -21,15 +21,25 @@ function authHeaders(): Record<string, string> {
   return API_TOKEN ? { authorization: `Bearer ${API_TOKEN}` } : {};
 }
 
+export interface RunsPage {
+  items: RunListItem[];
+  nextCursor: string | null;
+}
+
 /**
  * Server-side client for the Control API. The dashboard never talks to
  * PostgreSQL or the queue directly, and never fabricates run data.
  */
-export async function getRuns(options: { take?: number; status?: RunStatus } = {}): Promise<RunListItem[]> {
+export async function getRunsPage(
+  options: { take?: number; status?: RunStatus; cursor?: string } = {},
+): Promise<RunsPage> {
   const params = new URLSearchParams();
   params.set('take', String(options.take ?? 20));
   if (options.status) {
     params.set('status', options.status);
+  }
+  if (options.cursor) {
+    params.set('cursor', options.cursor);
   }
   const response = await fetch(`${BASE_URL}/api/runs?${params.toString()}`, {
     cache: 'no-store',
@@ -38,8 +48,7 @@ export async function getRuns(options: { take?: number; status?: RunStatus } = {
   if (!response.ok) {
     throw new Error(`Control API responded with HTTP ${response.status}`);
   }
-  const body = (await response.json()) as RunsListResponse;
-  return body.items;
+  return (await response.json()) as RunsPage;
 }
 
 export interface DeliveryAttempt {
