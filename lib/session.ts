@@ -4,12 +4,20 @@ import { redirect } from 'next/navigation';
 
 export const SESSION_COOKIE = 'relaycheck_session';
 
+export interface WorkspaceSummary {
+  id: string;
+  name: string;
+  role: string;
+}
+
 export interface AuthUser {
   id: string;
   email: string;
   role: string;
   workspaceId: string;
   workspaceName: string;
+  workspaceRole: string;
+  workspaces: WorkspaceSummary[];
 }
 
 export interface AuthState {
@@ -53,3 +61,4 @@ export async function requireSession(): Promise<{ state: AuthState; token?: stri
   }
   return { state, token: sessionToken() };
 }
+

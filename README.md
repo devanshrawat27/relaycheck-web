@@ -18,6 +18,13 @@ server-side data fetches forward it as a bearer token. Runs are scoped to the
 user's workspace, and the header shows the signed-in email with Sign out.
 In local mode (auth disabled) no login is required.
 
+## Workspace
+
+`/workspace` lists the active workspace's members with role badges. Owners can
+change roles; owners and admins can create one-time invite links
+(`/join?token=...`) and remove non-owner members. Users in multiple workspaces
+get a switcher in the header.
+
 ## Run detail
 
 `/runs/[id]` shows the final verdict prominently plus verdict-specific

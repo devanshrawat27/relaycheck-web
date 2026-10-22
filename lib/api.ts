@@ -123,6 +123,30 @@ export async function isServiceHealthy(url: string): Promise<boolean> {
   }
 }
 
+export interface WorkspaceMember {
+  userId: string;
+  email: string;
+  role: string;
+  joinedAt: string;
+}
+
+export interface WorkspaceMembers {
+  workspaceId: string;
+  workspaceName: string;
+  members: WorkspaceMember[];
+}
+
+export async function getWorkspaceMembers(token?: string): Promise<WorkspaceMembers> {
+  const response = await fetch(`${BASE_URL}/api/workspace/members`, {
+    cache: 'no-store',
+    headers: { accept: 'application/json', ...authHeaders(token) },
+  });
+  if (!response.ok) {
+    throw new Error(`Control API responded with HTTP ${response.status}`);
+  }
+  return (await response.json()) as WorkspaceMembers;
+}
+
 /** Run detail, or null when the run does not exist (404). */
 export async function getRun(id: string, token?: string): Promise<RunDetail | null> {
   const response = await fetch(`${BASE_URL}/api/runs/${encodeURIComponent(id)}`, {
@@ -137,5 +161,6 @@ export async function getRun(id: string, token?: string): Promise<RunDetail | nu
   }
   return (await response.json()) as RunDetail;
 }
+
 
 
