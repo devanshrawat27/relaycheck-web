@@ -73,13 +73,14 @@ implemented.
 
 ## Run form
 
-`/runs/new` exposes exactly one input — the scenario selector — with three
-scenarios: `duplicate_delivery`, `receiver_failure`, and `receiver_timeout`.
-It shows a "Planned behavior" preview for each and never renders a
-destination URL field; unknown scenarios are rejected server-side (redirect
-with an inline error). The form is a plain server action, so it works
-without client JavaScript; verified end-to-end: submitting creates a real
-`queued` run.
+`/runs/new` exposes a scenario selector — `duplicate_delivery`,
+`receiver_failure`, and `receiver_timeout` — plus an optional **Advanced**
+section with bounded overrides (attempts 1–5, timeout 500–15000 ms, injected
+status 400–599, injected delay up to 10000 ms). Irrelevant fields are dropped
+per scenario and the API re-validates every bound. It shows a "Planned
+behavior" preview and never renders a destination URL field; unknown scenarios
+are rejected server-side. The form is a plain server action, so it works
+without client JavaScript.
 
 ## Design rules followed (`DESIGN.md`)
 

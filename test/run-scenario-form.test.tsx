@@ -25,15 +25,33 @@ describe('RunScenarioForm', () => {
     expect(screen.getByRole('button', { name: /Start run/ })).toBeInTheDocument();
   });
 
+  it('exposes bounded advanced parameters', () => {
+    render(<RunScenarioForm />);
+
+    expect(screen.getByLabelText(/Delivery attempts/)).toHaveAttribute('max', '5');
+    expect(screen.getByLabelText(/Timeout per delivery/)).toHaveAttribute('max', '15000');
+    expect(screen.getByLabelText(/Injected status/)).toHaveAttribute('min', '400');
+    expect(screen.getByLabelText(/Injected delay/)).toHaveAttribute('max', '10000');
+  });
+
   it('never exposes a destination URL input', () => {
     const { container } = render(<RunScenarioForm />);
 
     expect(container.querySelector('input[type="url"]')).toBeNull();
     expect(container.querySelector('input[name="url"]')).toBeNull();
     expect(container.querySelector('input[name="destinationUrl"]')).toBeNull();
-    // The only inputs are the three scenario radios.
+    // Three scenario radios plus four bounded numeric overrides.
     const inputs = Array.from(container.querySelectorAll('input'));
-    expect(inputs).toHaveLength(3);
-    expect(inputs.every((input) => input.getAttribute('name') === 'scenario')).toBe(true);
+    expect(inputs).toHaveLength(7);
+    const names = inputs.map((input) => input.getAttribute('name'));
+    expect(names).toEqual([
+      'scenario',
+      'scenario',
+      'scenario',
+      'deliveryCount',
+      'timeoutMs',
+      'httpStatus',
+      'delayMs',
+    ]);
   });
 });

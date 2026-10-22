@@ -6,6 +6,8 @@ const ERROR_MESSAGES: Record<string, string> = {
   'unsupported-scenario': 'Choose one of the supported scenarios.',
   'api-unreachable': 'Could not reach the Control API. Make sure it is running and try again.',
   'api-rejected': 'The Control API rejected this run. Check the service logs and try again.',
+  'invalid-params':
+    'Those parameters are out of bounds for the selected scenario (attempts 1–5, timeout 500–15000 ms, status 400–599, delay 0–10000 ms; delay must exceed the timeout).',
 };
 
 interface NewRunPageProps {

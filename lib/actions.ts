@@ -9,19 +9,46 @@ function isSupportedScenario(value: unknown): boolean {
   return typeof value === 'string' && (SUPPORTED_SCENARIOS as readonly string[]).includes(value);
 }
 
+/** Parse an optional bounded integer form field; NaN means "invalid input". */
+function optionalInt(formData: FormData, name: string): number | undefined {
+  const raw = String(formData.get(name) ?? '').trim();
+  if (!raw) {
+    return undefined;
+  }
+  const value = Number(raw);
+  return Number.isInteger(value) ? value : Number.NaN;
+}
+
 /**
- * Server action behind the run form. Only the scenario identifier is ever
- * accepted from the browser — all delivery parameters (event IDs, delivery
- * count, timeout, and the fixed local target) are generated server-side by
- * the Control API and the runner. There is deliberately no URL input.
- *
- * Errors are surfaced as a redirect code on the form page so the form works
- * without client JavaScript (progressive enhancement).
+ * Server action behind the run form. The browser supplies the scenario and
+ * optional bounded parameters; event IDs and the fixed local target are
+ * always generated server-side. Irrelevant parameters are dropped here and
+ * re-validated by the Control API. There is deliberately no URL input.
  */
 export async function createRunAction(formData: FormData): Promise<void> {
   const scenario = formData.get('scenario');
   if (!isSupportedScenario(scenario)) {
     redirect('/runs/new?error=unsupported-scenario');
+  }
+
+  const deliveryCount = optionalInt(formData, 'deliveryCount');
+  const timeoutMs = optionalInt(formData, 'timeoutMs');
+  const httpStatus = optionalInt(formData, 'httpStatus');
+  const delayMs = optionalInt(formData, 'delayMs');
+  if ([deliveryCount, timeoutMs, httpStatus, delayMs].some((value) => Number.isNaN(value))) {
+    redirect('/runs/new?error=invalid-params');
+  }
+
+  const payload: Record<string, unknown> = { scenario };
+  if (scenario === 'duplicate_delivery') {
+    if (deliveryCount !== undefined) payload.deliveryCount = deliveryCount;
+    if (timeoutMs !== undefined) payload.timeoutMs = timeoutMs;
+  } else if (scenario === 'receiver_failure') {
+    if (httpStatus !== undefined) payload.httpStatus = httpStatus;
+    if (timeoutMs !== undefined) payload.timeoutMs = timeoutMs;
+  } else {
+    if (delayMs !== undefined) payload.delayMs = delayMs;
+    if (timeoutMs !== undefined) payload.timeoutMs = timeoutMs;
   }
 
   const baseUrl = (process.env.CONTROL_API_URL ?? 'http://localhost:3200').replace(/\/$/, '');
@@ -35,17 +62,19 @@ export async function createRunAction(formData: FormData): Promise<void> {
         'content-type': 'application/json',
         ...(apiToken ? { authorization: `Bearer ${apiToken}` } : {}),
       },
-      body: JSON.stringify({ scenario }),
+      body: JSON.stringify(payload),
       cache: 'no-store',
     });
   } catch {
     redirect('/runs/new?error=api-unreachable');
   }
 
+  if (response.status === 400) {
+    redirect('/runs/new?error=invalid-params');
+  }
   if (response.status !== 202) {
     redirect('/runs/new?error=api-rejected');
   }
 
   redirect('/');
 }
-

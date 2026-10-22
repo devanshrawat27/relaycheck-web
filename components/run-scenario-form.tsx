@@ -92,6 +92,82 @@ export function RunScenarioForm() {
         </p>
       </section>
 
+      <section
+        aria-labelledby="advanced-heading"
+        className="rounded-2xl border border-line bg-surface p-5 shadow-card"
+      >
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+          Advanced (optional)
+        </p>
+        <h2 id="advanced-heading" className="mt-1 text-base font-semibold text-ink">
+          Bounded overrides
+        </h2>
+        <p className="mt-1 text-xs text-muted">
+          Only the fields relevant to the selected scenario are sent. Bounds are enforced
+          server-side; the Control API rejects anything outside them.
+        </p>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div className="space-y-1.5">
+            <label htmlFor="deliveryCount" className="block text-xs font-medium text-muted">
+              Delivery attempts (duplicate only, 1–5)
+            </label>
+            <input
+              id="deliveryCount"
+              name="deliveryCount"
+              type="number"
+              min={1}
+              max={5}
+              placeholder="3"
+              className="w-full rounded-xl border border-line bg-paper/50 px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label htmlFor="timeoutMs" className="block text-xs font-medium text-muted">
+              Timeout per delivery (500–15000 ms)
+            </label>
+            <input
+              id="timeoutMs"
+              name="timeoutMs"
+              type="number"
+              min={500}
+              max={15000}
+              step={100}
+              placeholder="scenario default"
+              className="w-full rounded-xl border border-line bg-paper/50 px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label htmlFor="httpStatus" className="block text-xs font-medium text-muted">
+              Injected status (failure only, 400–599)
+            </label>
+            <input
+              id="httpStatus"
+              name="httpStatus"
+              type="number"
+              min={400}
+              max={599}
+              placeholder="503"
+              className="w-full rounded-xl border border-line bg-paper/50 px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label htmlFor="delayMs" className="block text-xs font-medium text-muted">
+              Injected delay (timeout only, must exceed timeout)
+            </label>
+            <input
+              id="delayMs"
+              name="delayMs"
+              type="number"
+              min={0}
+              max={10000}
+              step={100}
+              placeholder="2000"
+              className="w-full rounded-xl border border-line bg-paper/50 px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+            />
+          </div>
+        </div>
+      </section>
+
       <div className="flex flex-wrap items-center gap-4">
         <button
           type="submit"
