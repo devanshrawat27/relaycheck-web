@@ -136,10 +136,15 @@ jobs:
 
       - name: Build services
         run: |
-          npm run build --prefix deps/control-api
-          npm run build --prefix deps/runner
-          npm run build --prefix deps/demo-receiver
-          npm run build
+          for dir in deps/control-api deps/runner deps/demo-receiver .; do
+            name=$(echo "$dir" | tr "/" "_")
+            if ! (cd "$dir" && npm run build) > "/tmp/build-$name.log" 2>&1; then
+              echo "::error::build failed in $dir"
+              tail -n 30 "/tmp/build-$name.log" | while IFS= read -r line; do echo "::error::$line"; done
+              exit 1
+            fi
+            echo "built $dir"
+          done
 
       - name: Install Playwright browser
         run: npx playwright install --with-deps chromium
@@ -156,3 +161,4 @@ jobs:
             test-results/
             playwright-report/
           if-no-files-found: ignore
+
