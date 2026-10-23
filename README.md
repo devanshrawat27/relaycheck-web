@@ -110,6 +110,12 @@ touches PostgreSQL or RabbitMQ.
   API-error panel, evidence tables, status filters, run form (scenario
   options + no destination input), and the Control API client (runs, detail,
   metrics).
+- `npm run test:e2e` — Playwright browser tests (Chromium): unauthenticated
+  redirect, register → run duplicate scenario → passed evidence detail, and a
+  failed assertion callout. The global setup starts the demo receiver, Control
+  API, and runner (expects sibling checkouts and existing builds) and stops
+  them afterwards.
+- `npx playwright install chromium` — install the browser once per machine.
 - `npm run build` / `npm start` — production build and server on port 3000.
 
 Package manager: **npm** (lockfiles are committed). Node >= 20.

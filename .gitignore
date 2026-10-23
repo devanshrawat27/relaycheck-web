@@ -9,3 +9,6 @@ coverage/
 *.log
 .DS_Store
 Thumbs.dbtsconfig.tsbuildinfo
+playwright-report/
+test-results/
+.e2e-stack.json
