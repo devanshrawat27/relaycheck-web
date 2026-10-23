@@ -77,9 +77,11 @@ implemented.
 `receiver_failure`, and `receiver_timeout` — plus an optional **Advanced**
 section with bounded overrides (attempts 1–5, timeout 500–15000 ms, injected
 status 400–599, injected delay up to 10000 ms). Irrelevant fields are dropped
-per scenario and the API re-validates every bound. It shows a "Planned
-behavior" preview and never renders a destination URL field; unknown scenarios
-are rejected server-side. The form is a plain server action, so it works
+per scenario and the API re-validates every bound. A **target selector** lists
+only configured target names (the API never exposes or accepts URLs); remote
+targets show a warning that delivery status alone is verified. The form shows a
+"Planned behavior" preview and never renders a destination URL field; unknown
+scenarios are rejected server-side. It is a plain server action, so it works
 without client JavaScript.
 
 ## Design rules followed (`DESIGN.md`)

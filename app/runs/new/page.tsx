@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { RunScenarioForm } from '@/components/run-scenario-form';
+import { getTargets, type PublicTarget } from '@/lib/api';
 import { requireSession } from '@/lib/session';
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -15,7 +16,13 @@ interface NewRunPageProps {
 }
 
 export default async function NewRunPage({ searchParams }: NewRunPageProps) {
-  await requireSession();
+  const { token } = await requireSession();
+  let targets: PublicTarget[] = [];
+  try {
+    targets = await getTargets(token);
+  } catch {
+    targets = [];
+  }
   const raw = Array.isArray(searchParams?.error) ? searchParams?.error[0] : searchParams?.error;
   const errorMessage = raw ? (ERROR_MESSAGES[raw] ?? 'The run could not be started.') : null;
 
@@ -51,8 +58,9 @@ export default async function NewRunPage({ searchParams }: NewRunPageProps) {
         ) : null}
       </div>
 
-      <RunScenarioForm />
+      <RunScenarioForm targets={targets} />
     </section>
   );
 }
+
 

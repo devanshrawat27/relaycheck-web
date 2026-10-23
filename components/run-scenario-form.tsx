@@ -1,4 +1,5 @@
 import { createRunAction } from '@/lib/actions';
+import type { PublicTarget } from '@/lib/api';
 
 const SCENARIOS: { value: string; label: string; description: string; expected: string }[] = [
   {
@@ -25,7 +26,12 @@ const SCENARIOS: { value: string; label: string; description: string; expected: 
  * Plain server-action form (no client JavaScript required). It exposes only
  * the scenario selector — never a destination URL.
  */
-export function RunScenarioForm() {
+export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
+  const targetOptions =
+    targets.length > 0
+      ? targets
+      : [{ name: 'demo-receiver', kind: 'demo' as const, oracle: true }];
+
   return (
     <form action={createRunAction} className="space-y-8">
       <fieldset className="space-y-4">
@@ -90,6 +96,49 @@ export function RunScenarioForm() {
           The form cannot target any other host. Fault scenarios require the receiver to run in
           test mode.
         </p>
+      </section>
+
+      <section
+        aria-labelledby="target-heading"
+        className="rounded-2xl border border-line bg-surface p-5 shadow-card"
+      >
+        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+          Delivery target
+        </p>
+        <h2 id="target-heading" className="mt-1 text-base font-semibold text-ink">
+          Configured targets only
+        </h2>
+        <p className="mt-1 text-xs text-muted">
+          The API never accepts a URL. Only targets registered in the server configuration can be
+          selected.
+        </p>
+        <div className="mt-4 space-y-1.5 sm:max-w-sm">
+          <label htmlFor="target" className="block text-xs font-medium text-muted">
+            Target
+          </label>
+          <select
+            id="target"
+            name="target"
+            defaultValue="demo-receiver"
+            className="w-full rounded-xl border border-line bg-paper/50 px-3 py-2 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+          >
+            {targetOptions.map((target) => (
+              <option key={target.name} value={target.name}>
+                {target.name}
+                {target.kind === 'demo'
+                  ? ' (demo receiver)'
+                  : target.oracle
+                    ? ' (remote, oracle)'
+                    : ' (remote, status only)'}
+              </option>
+            ))}
+          </select>
+          {targetOptions.some((target) => target.kind === 'remote') ? (
+            <p className="text-xs text-warn">
+              Remote targets verify delivery status only; no business-effect oracle is available.
+            </p>
+          ) : null}
+        </div>
       </section>
 
       <section

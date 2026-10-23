@@ -123,6 +123,23 @@ export async function isServiceHealthy(url: string): Promise<boolean> {
   }
 }
 
+export interface PublicTarget {
+  name: string;
+  kind: 'demo' | 'remote';
+  oracle: boolean;
+}
+
+export async function getTargets(token?: string): Promise<PublicTarget[]> {
+  const response = await fetch(`${BASE_URL}/api/targets`, {
+    cache: 'no-store',
+    headers: { accept: 'application/json', ...authHeaders(token) },
+  });
+  if (!response.ok) {
+    throw new Error(`Control API responded with HTTP ${response.status}`);
+  }
+  return (await response.json()) as PublicTarget[];
+}
+
 export interface WorkspaceMember {
   userId: string;
   email: string;
@@ -161,6 +178,7 @@ export async function getRun(id: string, token?: string): Promise<RunDetail | nu
   }
   return (await response.json()) as RunDetail;
 }
+
 
 
 

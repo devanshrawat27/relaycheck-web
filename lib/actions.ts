@@ -39,7 +39,8 @@ export async function createRunAction(formData: FormData): Promise<void> {
     redirect('/runs/new?error=invalid-params');
   }
 
-  const payload: Record<string, unknown> = { scenario };
+  const target = String(formData.get('target') ?? '').trim();
+  const payload: Record<string, unknown> = { scenario, ...(target ? { target } : {}) };
   if (scenario === 'duplicate_delivery') {
     if (deliveryCount !== undefined) payload.deliveryCount = deliveryCount;
     if (timeoutMs !== undefined) payload.timeoutMs = timeoutMs;
@@ -78,3 +79,4 @@ export async function createRunAction(formData: FormData): Promise<void> {
 
   redirect('/');
 }
+
