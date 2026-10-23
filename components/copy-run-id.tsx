@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-/** Small progressive enhancement: copy the full run ID to the clipboard. */
+/** Small progressive enhancement: copy text to the clipboard. */
 export function CopyRunId({ id }: { id: string }) {
   const [copied, setCopied] = useState(false);
 
@@ -19,13 +19,13 @@ export function CopyRunId({ id }: { id: string }) {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <code className="select-all rounded-md bg-ink/5 px-2 py-1 font-mono text-xs text-muted">
+      <code className="select-all rounded-lg bg-sand px-2.5 py-1 font-mono text-xs text-muted">
         {id}
       </code>
       <button
         type="button"
         onClick={() => void copy()}
-        className="rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-muted transition-colors hover:border-ink/40 hover:text-ink"
+        className="rounded-lg border border-line bg-surface px-3 py-1 text-xs font-medium text-muted transition-colors hover:border-ember-border hover:text-ember-dark"
         aria-live="polite"
       >
         {copied ? 'Copied' : 'Copy ID'}

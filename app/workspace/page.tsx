@@ -11,7 +11,7 @@ import {
 export const dynamic = 'force-dynamic';
 
 const ROLE_BADGE: Record<string, string> = {
-  owner: 'bg-ember-soft text-ember',
+  owner: 'bg-ember-soft text-ember-dark',
   admin: 'bg-info-soft text-info',
   member: 'bg-line/50 text-muted',
 };
@@ -55,12 +55,12 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
   return (
     <section aria-labelledby="workspace-heading" className="space-y-10">
       <div className="space-y-3">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember-dark">
           RelayCheck / Workspace
         </p>
         <h1
           id="workspace-heading"
-          className="text-4xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-5xl"
+          className="max-w-3xl break-words font-display text-4xl font-normal leading-[1.05] tracking-tight text-ink sm:text-5xl"
         >
           {data?.workspaceName ?? 'Workspace'}
         </h1>
@@ -80,12 +80,12 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
       ) : null}
 
       {invited ? (
-        <div className="rounded-2xl border border-line bg-surface p-5 shadow-card">
+        <div className="rounded-xl border border-line bg-surface p-5 shadow-card">
           <h2 className="text-sm font-semibold text-ink">Invitation created</h2>
           <p className="mt-1 text-xs text-muted">
             Share this one-time link (valid 7 days). It joins the recipient to this workspace.
           </p>
-          <code className="mt-3 block select-all break-all rounded-xl bg-ink/5 px-3 py-2 font-mono text-xs text-ink">
+          <code className="mt-3 block select-all break-all rounded-lg bg-sand px-3 py-2 font-mono text-xs text-ink">
             /join?token={invited}
           </code>
         </div>
@@ -109,7 +109,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
               </h2>
               <form
                 action={inviteMemberAction}
-                className="flex flex-col gap-3 rounded-2xl border border-line bg-surface p-5 shadow-card sm:flex-row sm:items-end"
+                className="flex flex-col gap-3 rounded-xl border border-line bg-surface p-5 shadow-card sm:flex-row sm:items-end"
               >
                 <div className="flex-1 space-y-1.5">
                   <label htmlFor="invite-email" className="block text-xs font-medium text-muted">
@@ -120,7 +120,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
                     name="email"
                     type="email"
                     placeholder="teammate@example.com"
-                    className="w-full rounded-xl border border-line bg-paper/50 px-3 py-2 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                    className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -131,7 +131,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
                     id="invite-role"
                     name="role"
                     defaultValue="member"
-                    className="rounded-xl border border-line bg-paper/50 px-3 py-2 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                    className="rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
                   >
                     <option value="member">Member</option>
                     <option value="admin">Admin</option>
@@ -139,7 +139,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
                 </div>
                 <button
                   type="submit"
-                  className="rounded-full bg-ember px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-ink"
+                  className="rounded-lg bg-ember px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-ember-dark"
                 >
                   Create invite
                 </button>
@@ -154,12 +154,12 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
             >
               Members
             </h2>
-            <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+            <div className="overflow-hidden rounded-xl border border-line bg-surface shadow-card">
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[640px] border-collapse text-left">
                   <caption className="sr-only">Workspace members</caption>
                   <thead>
-                    <tr className="border-b border-line bg-paper/60">
+                    <tr className="border-b border-line bg-sand/60">
                       {['Email', 'Role', 'Joined', 'Actions'].map((heading) => (
                         <th
                           key={heading}
@@ -175,7 +175,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
                     {data.members.map((member) => (
                       <tr
                         key={member.userId}
-                        className="border-b border-line/60 transition-colors last:border-b-0 hover:bg-paper/50"
+                        className="border-b border-line/60 transition-colors last:border-b-0 hover:bg-sand/40"
                       >
                         <td className="px-5 py-3.5 text-sm text-ink">{member.email}</td>
                         <td className="px-5 py-3.5">
@@ -210,7 +210,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
                                 </select>
                                 <button
                                   type="submit"
-                                  className="rounded-full border border-line px-2.5 py-1 text-xs text-muted hover:border-ink/40 hover:text-ink"
+                                  className="rounded-lg border border-line px-2.5 py-1 text-xs text-muted hover:border-ember-border hover:text-ink"
                                 >
                                   Update
                                 </button>
@@ -221,7 +221,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
                                 <input type="hidden" name="userId" value={member.userId} />
                                 <button
                                   type="submit"
-                                  className="rounded-full border border-danger/25 px-2.5 py-1 text-xs text-danger hover:bg-danger-soft"
+                                  className="rounded-lg border border-danger/25 px-2.5 py-1 text-xs text-danger hover:bg-danger-soft"
                                 >
                                   Remove
                                 </button>
@@ -245,7 +245,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
       ) : null}
 
       <p className="text-xs text-muted">
-        Need another workspace? <Link href="/register" className="text-ember underline-offset-4 hover:underline">Create an account</Link>{' '}
+        Need another workspace? <Link href="/register" className="text-ember-dark underline-offset-4 hover:underline">Create an account</Link>{' '}
         gives each user a personal workspace; join others via invitation links.
       </p>
     </section>

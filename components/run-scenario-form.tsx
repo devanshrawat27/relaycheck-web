@@ -48,7 +48,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
                 defaultChecked={index === 0}
                 className="peer sr-only"
               />
-              <span className="flex items-start justify-between gap-5 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors peer-checked:border-ink peer-checked:bg-ink peer-checked:text-paper peer-checked:[&>span:last-child]:opacity-100 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ember hover:border-ink/40">
+              <span className="flex items-start justify-between gap-5 rounded-xl border border-line bg-surface px-5 py-4 transition-colors peer-checked:border-ember-border peer-checked:bg-ember-soft peer-checked:text-ink peer-checked:[&_.dot]:opacity-100 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ember hover:border-ember-border">
                 <span className="space-y-1.5">
                   <span className="block text-sm font-semibold">{scenario.label}</span>
                   <span className="block text-xs leading-relaxed opacity-70">
@@ -60,8 +60,10 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
                 </span>
                 <span
                   aria-hidden="true"
-                  className="mt-1 h-4 w-4 shrink-0 rounded-full border-2 border-current opacity-30"
-                />
+                  className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 border-current opacity-40 transition-opacity"
+                >
+                  <span className="dot h-1.5 w-1.5 rounded-full bg-ember opacity-0 transition-opacity" />
+                </span>
               </span>
             </label>
           ))}
@@ -70,7 +72,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
 
       <section
         aria-labelledby="preview-heading"
-        className="rounded-2xl border border-line bg-surface p-5 shadow-card"
+        className="rounded-xl border border-line bg-surface p-5 shadow-card"
       >
         <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Bounded by design</p>
         <h2 id="preview-heading" className="mt-1 text-base font-semibold text-ink">
@@ -100,7 +102,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
 
       <section
         aria-labelledby="target-heading"
-        className="rounded-2xl border border-line bg-surface p-5 shadow-card"
+        className="rounded-xl border border-line bg-surface p-5 shadow-card"
       >
         <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
           Delivery target
@@ -120,7 +122,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
             id="target"
             name="target"
             defaultValue="demo-receiver"
-            className="w-full rounded-xl border border-line bg-paper/50 px-3 py-2 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+            className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
           >
             {targetOptions.map((target) => (
               <option key={target.name} value={target.name}>
@@ -143,7 +145,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
 
       <section
         aria-labelledby="advanced-heading"
-        className="rounded-2xl border border-line bg-surface p-5 shadow-card"
+        className="rounded-xl border border-line bg-surface p-5 shadow-card"
       >
         <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
           Advanced (optional)
@@ -167,7 +169,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
               min={1}
               max={5}
               placeholder="3"
-              className="w-full rounded-xl border border-line bg-paper/50 px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+              className="w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
             />
           </div>
           <div className="space-y-1.5">
@@ -182,7 +184,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
               max={15000}
               step={100}
               placeholder="scenario default"
-              className="w-full rounded-xl border border-line bg-paper/50 px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+              className="w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
             />
           </div>
           <div className="space-y-1.5">
@@ -196,7 +198,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
               min={400}
               max={599}
               placeholder="503"
-              className="w-full rounded-xl border border-line bg-paper/50 px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+              className="w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
             />
           </div>
           <div className="space-y-1.5">
@@ -211,7 +213,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
               max={10000}
               step={100}
               placeholder="2000"
-              className="w-full rounded-xl border border-line bg-paper/50 px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+              className="w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
             />
           </div>
         </div>
@@ -220,7 +222,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
       <div className="flex flex-wrap items-center gap-4">
         <button
           type="submit"
-          className="inline-flex items-center gap-2 rounded-full bg-ember px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-ink"
+          className="inline-flex items-center gap-2 rounded-lg bg-ember px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-ember-dark"
         >
           Start run
           <span aria-hidden="true">→</span>

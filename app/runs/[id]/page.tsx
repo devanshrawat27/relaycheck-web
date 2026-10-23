@@ -32,7 +32,7 @@ function VerdictExplanation({
 }) {
   if (status === 'failed') {
     return (
-      <div className="rounded-2xl border border-danger/25 bg-danger-soft px-5 py-4 text-sm">
+      <div className="rounded-xl border border-danger/25 bg-danger-soft px-5 py-4 text-sm">
         <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-danger">
           assertion failure
         </p>
@@ -50,7 +50,7 @@ function VerdictExplanation({
   }
   if (status === 'error') {
     return (
-      <div className="rounded-2xl border border-warn/25 bg-warn-soft px-5 py-4 text-sm">
+      <div className="rounded-xl border border-warn/25 bg-warn-soft px-5 py-4 text-sm">
         <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-warn">
           execution error
         </p>
@@ -78,7 +78,7 @@ function Stat({
   hint: string;
 }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface px-5 py-4 shadow-card">
+    <div className="rounded-xl border border-line bg-surface px-5 py-4 shadow-card">
       <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">{label}</p>
       <p className="mt-2 font-mono text-2xl font-medium tracking-tight text-ink">{value}</p>
       <p className="mt-1 text-xs text-muted">{hint}</p>
@@ -128,13 +128,13 @@ export default async function RunDetailPage({ params }: RunDetailPageProps) {
         ← Back to runs
       </Link>
 
-      <header className="rounded-2xl border border-line bg-surface p-6 shadow-card sm:p-8">
+      <header className="rounded-xl border border-line bg-surface p-6 shadow-card sm:p-8">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-3">
-            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember-dark">
               RelayCheck / Run detail
             </p>
-            <h1 className="text-3xl font-semibold leading-tight tracking-tight text-ink sm:text-4xl">
+            <h1 className="font-display text-3xl font-normal leading-tight tracking-tight text-ink sm:text-4xl">
               {run.scenario}
             </h1>
             <CopyRunId id={run.id} />

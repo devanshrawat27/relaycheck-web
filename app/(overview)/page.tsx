@@ -27,12 +27,12 @@ function formatDuration(durationMs: number | null): string {
 
 function RunsTable({ runs }: { runs: RunListItem[] }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+    <div className="overflow-hidden rounded-xl border border-line bg-surface shadow-card">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[780px] border-collapse text-left">
           <caption className="sr-only">Recent scenario runs</caption>
           <thead>
-            <tr className="border-b border-line bg-paper/60">
+            <tr className="border-b border-line bg-sand/60">
               {['Scenario', 'Run', 'Status', 'Created', 'Duration', 'Result'].map((heading) => (
                 <th
                   key={heading}
@@ -48,13 +48,13 @@ function RunsTable({ runs }: { runs: RunListItem[] }) {
             {runs.map((run) => (
               <tr
                 key={run.id}
-                className="border-b border-line/60 transition-colors last:border-b-0 hover:bg-paper/60"
+                className="border-b border-line/60 transition-colors last:border-b-0 hover:bg-sand/60"
               >
                 <td className="px-5 py-4 font-mono text-xs text-ink">{run.scenario}</td>
                 <td className="px-5 py-4 font-mono text-xs">
                   <Link
                     href={`/runs/${run.id}`}
-                    className="text-ember underline-offset-4 hover:underline"
+                    className="text-ember-dark underline-offset-4 hover:underline"
                     title={run.id}
                   >
                     {run.id.slice(0, 8)}
@@ -84,12 +84,12 @@ function RunsTable({ runs }: { runs: RunListItem[] }) {
 function EmptyState({ filtered }: { filtered: boolean }) {
   if (filtered) {
     return (
-      <div className="rounded-2xl border border-dashed border-line bg-surface/60 px-6 py-14 text-center">
+      <div className="rounded-xl border border-dashed border-line bg-sand/40 px-6 py-14 text-center">
         <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">no matches</p>
         <h2 className="mt-2 text-lg font-semibold text-ink">No runs match this filter</h2>
         <p className="mt-2 text-sm text-muted">
           Try a different status, or{' '}
-          <Link href="/" className="text-ember underline-offset-4 hover:underline">
+          <Link href="/" className="text-ember-dark underline-offset-4 hover:underline">
             show all runs
           </Link>
           .
@@ -99,7 +99,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
   }
 
   return (
-    <div className="rounded-2xl border border-dashed border-line bg-surface/60 px-6 py-16 text-center">
+    <div className="rounded-xl border border-dashed border-line bg-sand/40 px-6 py-16 text-center">
       <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted">nothing yet</p>
       <h2 className="mt-2 text-xl font-semibold tracking-tight text-ink">No runs recorded</h2>
       <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-muted">
@@ -108,7 +108,7 @@ function EmptyState({ filtered }: { filtered: boolean }) {
       </p>
       <Link
         href="/runs/new"
-        className="mt-6 inline-flex items-center rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-paper transition-colors hover:bg-ember"
+        className="mt-6 inline-flex items-center rounded-lg bg-ember px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-ember-dark"
       >
         Run a scenario
       </Link>
@@ -143,12 +143,12 @@ export default async function RunsOverviewPage({ searchParams }: OverviewPagePro
     <section aria-labelledby="runs-heading" className="space-y-10">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-3">
-          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember">
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember-dark">
             RelayCheck / Runs
           </p>
           <h1
             id="runs-heading"
-            className="max-w-2xl text-4xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-5xl"
+            className="max-w-2xl font-display text-4xl font-normal leading-[1.05] tracking-tight text-ink sm:text-5xl"
           >
             Evidence for every delivery.
           </h1>
@@ -159,7 +159,7 @@ export default async function RunsOverviewPage({ searchParams }: OverviewPagePro
         </div>
         <Link
           href="/runs/new"
-          className="inline-flex shrink-0 items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm font-semibold text-paper transition-colors hover:bg-ember"
+          className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-ember px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-ember-dark"
         >
           Run a scenario
           <span aria-hidden="true">→</span>
@@ -192,7 +192,7 @@ export default async function RunsOverviewPage({ searchParams }: OverviewPagePro
                     ...(status ? { status } : {}),
                     cursor: nextCursor,
                   }).toString()}`}
-                  className="inline-flex items-center rounded-full border border-line bg-surface px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:border-ink/40"
+                  className="inline-flex items-center rounded-lg border border-line bg-surface px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:border-ember-border"
                 >
                   Load older runs
                 </Link>

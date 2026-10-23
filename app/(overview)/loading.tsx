@@ -11,8 +11,8 @@ export default function Loading() {
           <div className="h-3 w-20 animate-pulse rounded bg-line" />
           <div className="h-8 w-64 animate-pulse rounded-full bg-line/70" />
         </div>
-        <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
-          <div className="h-10 border-b border-line bg-paper/60" />
+        <div className="overflow-hidden rounded-xl border border-line bg-surface shadow-card">
+          <div className="h-10 border-b border-line bg-sand/60" />
           {Array.from({ length: 5 }).map((_, index) => (
             <div
               key={index}

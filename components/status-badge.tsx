@@ -14,7 +14,7 @@ const STATUS_STYLES: Record<RunStatus, StatusStyle> = {
   queued: {
     label: 'Queued',
     icon: '•',
-    className: 'border-line bg-line/40 text-muted',
+    className: 'border-line bg-sand text-muted',
   },
   running: {
     label: 'Running',
@@ -42,7 +42,7 @@ export function StatusBadge({ status, size = 'md' }: { status: RunStatus; size?:
   const style = STATUS_STYLES[status];
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-full border font-semibold ${style.className} ${
+      className={`inline-flex items-center gap-2 rounded-lg border font-semibold ${style.className} ${
         size === 'lg' ? 'px-4 py-2 text-sm' : 'px-2.5 py-1 text-xs'
       }`}
     >

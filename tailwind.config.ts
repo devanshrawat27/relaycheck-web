@@ -5,19 +5,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: '#F6F2EA',
-        surface: '#FFFDF9',
-        ink: '#15120E',
-        muted: '#6E6659',
-        line: '#E2DACC',
+        paper: '#FAF7F1',
+        sand: '#F3EEE5',
+        surface: '#FFFEFB',
+        ink: '#25231F',
+        muted: '#716B63',
+        stone: '#999187',
+        line: '#E8E0D5',
         ember: {
-          DEFAULT: '#D9501F',
-          soft: '#FBE9E0',
+          DEFAULT: '#C94F16',
+          dark: '#A83D10',
+          soft: '#FBE7D5',
+          border: '#EBC6A8',
         },
-        success: { DEFAULT: '#1D7A4B', soft: '#E7F3EC' },
-        danger: { DEFAULT: '#B3261E', soft: '#FCEAE7' },
-        warn: { DEFAULT: '#A85B04', soft: '#FCF1E0' },
-        info: { DEFAULT: '#1D4ED8', soft: '#E9EFFC' },
+        success: { DEFAULT: '#347653', soft: '#E4F0E7' },
+        danger: { DEFAULT: '#D94A42', soft: '#FCE9E6' },
+        warn: { DEFAULT: '#B7791F', soft: '#FBF2E2' },
+        info: { DEFAULT: '#5276C7', soft: '#E9EFFA' },
       },
       fontFamily: {
         sans: [
@@ -30,13 +34,30 @@ const config: Config = {
           'Arial',
           'sans-serif',
         ],
+        display: ['Iowan Old Style', 'Palatino Linotype', 'Georgia', 'ui-serif', 'serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       boxShadow: {
-        card: '0 1px 2px rgba(21, 18, 14, 0.04), 0 12px 32px -20px rgba(21, 18, 14, 0.25)',
+        card: '0 1px 2px rgba(37, 35, 31, 0.04), 0 10px 24px -20px rgba(37, 35, 31, 0.22)',
       },
       borderRadius: {
-        '2xl': '1rem',
+        xl: '0.75rem',
+      },
+      keyframes: {
+        'scan-soft': {
+          '0%': { transform: 'translateY(-12%)', opacity: '0' },
+          '12%': { opacity: '0.55' },
+          '78%': { opacity: '0.4' },
+          '100%': { transform: 'translateY(430px)', opacity: '0' },
+        },
+        'float-soft': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-4px)' },
+        },
+      },
+      animation: {
+        'scan-soft': 'scan-soft 9s ease-in-out infinite',
+        'float-soft': 'float-soft 8s ease-in-out infinite',
       },
     },
   },

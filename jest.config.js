@@ -3,6 +3,7 @@ module.exports = {
   rootDir: '.',
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/test/**/*.test.ts', '<rootDir>/test/**/*.test.tsx'],
+  modulePathIgnorePatterns: ['<rootDir>/.next/'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },

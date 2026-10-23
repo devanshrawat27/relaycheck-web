@@ -15,15 +15,15 @@ body {
   background-color: theme('colors.paper');
   background-image: radial-gradient(
     1100px 420px at 50% -220px,
-    rgba(217, 80, 31, 0.1),
+    rgba(201, 79, 22, 0.08),
     transparent 70%
   );
   background-repeat: no-repeat;
 }
 
 ::selection {
-  background: theme('colors.ink');
-  color: theme('colors.paper');
+  background: theme('colors.ember.DEFAULT');
+  color: #ffffff;
 }
 
 /* Consistent, visible focus for keyboard users. */

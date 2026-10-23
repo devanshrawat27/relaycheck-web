@@ -13,18 +13,18 @@ const HEADER_CLASS =
 export function AssertionsTable({ assertions }: { assertions: AssertionResult[] }) {
   if (assertions.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-line bg-surface/60 px-5 py-6 text-sm text-muted">
+      <div className="rounded-xl border border-dashed border-line bg-sand/40 px-5 py-6 text-sm text-muted">
         No assertions recorded for this run.
       </div>
     );
   }
   return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+    <div className="overflow-hidden rounded-xl border border-line bg-surface shadow-card">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[560px] border-collapse">
           <caption className="sr-only">Assertion results</caption>
           <thead>
-            <tr className="border-b border-line bg-paper/60">
+            <tr className="border-b border-line bg-sand/60">
               <th scope="col" className={HEADER_CLASS}>
                 Assertion
               </th>
@@ -43,7 +43,7 @@ export function AssertionsTable({ assertions }: { assertions: AssertionResult[] 
             {assertions.map((assertion) => (
               <tr
                 key={assertion.id}
-                className="border-b border-line/60 transition-colors last:border-b-0 hover:bg-paper/50"
+                className="border-b border-line/60 transition-colors last:border-b-0 hover:bg-sand/40"
               >
                 <td className="px-5 py-3.5 font-mono text-xs text-ink">{assertion.name}</td>
                 <td className="px-5 py-3.5 font-mono text-xs text-muted">{assertion.expected}</td>
@@ -97,18 +97,18 @@ function OutcomePill({ outcome }: { outcome: DeliveryAttempt['outcome'] }) {
 export function AttemptsTable({ attempts }: { attempts: DeliveryAttempt[] }) {
   if (attempts.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-line bg-surface/60 px-5 py-6 text-sm text-muted">
+      <div className="rounded-xl border border-dashed border-line bg-sand/40 px-5 py-6 text-sm text-muted">
         No delivery attempts recorded yet.
       </div>
     );
   }
   return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-card">
+    <div className="overflow-hidden rounded-xl border border-line bg-surface shadow-card">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[720px] border-collapse">
           <caption className="sr-only">Delivery attempts</caption>
           <thead>
-            <tr className="border-b border-line bg-paper/60">
+            <tr className="border-b border-line bg-sand/60">
               {['#', 'Event ID', 'HTTP', 'Outcome', 'Duration', 'Detail'].map((heading) => (
                 <th key={heading} scope="col" className={HEADER_CLASS}>
                   {heading}
@@ -120,7 +120,7 @@ export function AttemptsTable({ attempts }: { attempts: DeliveryAttempt[] }) {
             {attempts.map((attempt) => (
               <tr
                 key={attempt.id}
-                className="border-b border-line/60 transition-colors last:border-b-0 hover:bg-paper/50"
+                className="border-b border-line/60 transition-colors last:border-b-0 hover:bg-sand/40"
               >
                 <td className="px-5 py-3.5 font-mono text-xs text-ink">
                   {attempt.attemptNumber}

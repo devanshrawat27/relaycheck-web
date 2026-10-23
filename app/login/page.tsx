@@ -19,10 +19,10 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
   return (
     <section className="mx-auto max-w-md space-y-8 py-6">
       <div className="space-y-3">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember-dark">
           RelayCheck / Sign in
         </p>
-        <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight text-ink">
+        <h1 className="font-display text-4xl font-normal leading-[1.05] tracking-tight text-ink">
           Welcome back.
         </h1>
         <p className="text-sm leading-relaxed text-muted">
@@ -39,9 +39,9 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
         </p>
       ) : null}
 
-      <form action={loginAction} className="space-y-5 rounded-2xl border border-line bg-surface p-6 shadow-card">
+      <form action={loginAction} className="space-y-5 rounded-xl border border-line bg-surface p-6 shadow-card">
         <div className="space-y-2">
-          <label htmlFor="email" className="block text-sm font-medium text-neutral-800">
+          <label htmlFor="email" className="block text-sm font-medium text-ink">
             Email
           </label>
           <input
@@ -50,11 +50,11 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
             type="email"
             autoComplete="email"
             required
-            className="w-full rounded-xl border border-line bg-paper/50 px-3.5 py-2.5 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+            className="w-full rounded-lg border border-line bg-surface px-3.5 py-2.5 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
           />
         </div>
         <div className="space-y-2">
-          <label htmlFor="password" className="block text-sm font-medium text-neutral-800">
+          <label htmlFor="password" className="block text-sm font-medium text-ink">
             Password
           </label>
           <input
@@ -63,18 +63,18 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
             type="password"
             autoComplete="current-password"
             required
-            className="w-full rounded-xl border border-line bg-paper/50 px-3.5 py-2.5 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+            className="w-full rounded-lg border border-line bg-surface px-3.5 py-2.5 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
           />
         </div>
         <button
           type="submit"
-          className="inline-flex w-full items-center justify-center rounded-full bg-ember px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-ink"
+          className="inline-flex w-full items-center justify-center rounded-lg bg-ember px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-ember-dark"
         >
           Sign in
         </button>
         <p className="text-center text-xs text-muted">
           No account?{' '}
-          <Link href="/register" className="text-ember underline-offset-4 hover:underline">
+          <Link href="/register" className="text-ember-dark underline-offset-4 hover:underline">
             Create one
           </Link>
         </p>

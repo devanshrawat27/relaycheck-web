@@ -6,10 +6,10 @@ interface RunFiltersProps {
 }
 
 function chipClass(active: boolean): string {
-  return `inline-flex items-center rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors ${
+  return `inline-flex items-center rounded-lg border px-3.5 py-1.5 text-xs font-medium transition-colors ${
     active
-      ? 'border-ink bg-ink text-paper'
-      : 'border-line bg-surface text-muted hover:border-ink/40 hover:text-ink'
+      ? 'border-ember-border bg-ember-soft text-ember-dark'
+      : 'border-line bg-surface text-muted hover:border-ember-border hover:text-ink'
   }`;
 }
 

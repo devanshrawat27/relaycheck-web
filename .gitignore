@@ -8,7 +8,8 @@ coverage/
 !.env.example
 *.log
 .DS_Store
-Thumbs.dbtsconfig.tsbuildinfo
+Thumbs.db
+tsconfig.tsbuildinfo
 playwright-report/
 test-results/
 .e2e-stack.json

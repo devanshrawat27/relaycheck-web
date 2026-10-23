@@ -35,12 +35,12 @@ export default async function NewRunPage({ searchParams }: NewRunPageProps) {
         >
           ← Back to runs
         </Link>
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember-dark">
           RelayCheck / New run
         </p>
         <h1
           id="new-run-heading"
-          className="text-4xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-5xl"
+          className="font-display text-4xl font-normal leading-[1.05] tracking-tight text-ink sm:text-5xl"
         >
           Run a scenario.
         </h1>

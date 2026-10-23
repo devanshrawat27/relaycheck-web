@@ -9,6 +9,14 @@ const RECEIVER_BASE = (process.env.DEMO_RECEIVER_URL ?? 'http://127.0.0.1:3100')
 
 const STATUS_ORDER = ['queued', 'running', 'passed', 'failed', 'error'] as const;
 
+const STATUS_TONE = {
+  queued: 'muted',
+  running: 'info',
+  passed: 'success',
+  failed: 'danger',
+  error: 'warn',
+} as const;
+
 function Card({
   label,
   value,
@@ -18,12 +26,22 @@ function Card({
   label: string;
   value: string;
   hint: string;
-  tone?: 'default' | 'warn' | 'danger';
+  tone?: 'default' | 'success' | 'info' | 'warn' | 'danger' | 'muted';
 }) {
   const toneClass =
-    tone === 'danger' ? 'text-danger' : tone === 'warn' ? 'text-warn' : 'text-ink';
+    tone === 'danger'
+      ? 'text-danger'
+      : tone === 'warn'
+        ? 'text-warn'
+        : tone === 'success'
+          ? 'text-success'
+          : tone === 'info'
+            ? 'text-info'
+            : tone === 'muted'
+              ? 'text-muted'
+              : 'text-ink';
   return (
-    <div className="rounded-2xl border border-line bg-surface px-5 py-4 shadow-card">
+    <div className="rounded-xl border border-line bg-surface px-5 py-4 shadow-card">
       <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">{label}</p>
       <p className={`mt-2 font-mono text-2xl font-medium tracking-tight ${toneClass}`}>{value}</p>
       <p className="mt-1 text-xs text-muted">{hint}</p>
@@ -33,7 +51,7 @@ function Card({
 
 function HealthRow({ name, healthy, target }: { name: string; healthy: boolean; target: string }) {
   return (
-    <div className="flex items-center justify-between gap-4 rounded-2xl border border-line bg-surface px-5 py-3.5 shadow-card">
+    <div className="flex items-center justify-between gap-4 rounded-xl border border-line bg-surface px-5 py-3.5 shadow-card">
       <div>
         <p className="text-sm font-semibold text-ink">{name}</p>
         <p className="font-mono text-xs text-muted">{target}</p>
@@ -81,12 +99,12 @@ export default async function DiagnosticsPage() {
   return (
     <section aria-labelledby="diagnostics-heading" className="space-y-10">
       <div className="space-y-3">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember-dark">
           RelayCheck / Diagnostics
         </p>
         <h1
           id="diagnostics-heading"
-          className="text-4xl font-semibold leading-[1.05] tracking-tight text-ink sm:text-5xl"
+          className="font-display text-4xl font-normal leading-[1.05] tracking-tight text-ink sm:text-5xl"
         >
           Is the pipeline healthy?
         </h1>
@@ -125,6 +143,7 @@ export default async function DiagnosticsPage() {
                   label={status}
                   value={String(metrics.runs[status] ?? 0)}
                   hint="persisted runs"
+                  tone={STATUS_TONE[status]}
                 />
               ))}
             </div>

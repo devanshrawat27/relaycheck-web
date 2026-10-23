@@ -13,10 +13,10 @@ export default async function JoinPage({ searchParams }: JoinPageProps) {
   return (
     <section className="mx-auto max-w-md space-y-8 py-6">
       <div className="space-y-3">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember-dark">
           RelayCheck / Invitation
         </p>
-        <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight text-ink">
+        <h1 className="font-display text-4xl font-normal leading-[1.05] tracking-tight text-ink">
           Join the workspace.
         </h1>
         <p className="text-sm leading-relaxed text-muted">
@@ -36,12 +36,12 @@ export default async function JoinPage({ searchParams }: JoinPageProps) {
       {token ? (
         <form
           action={acceptInvitationAction}
-          className="space-y-5 rounded-2xl border border-line bg-surface p-6 shadow-card"
+          className="space-y-5 rounded-xl border border-line bg-surface p-6 shadow-card"
         >
           <input type="hidden" name="token" value={token} />
           <button
             type="submit"
-            className="inline-flex w-full items-center justify-center rounded-full bg-ember px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-ink"
+            className="inline-flex w-full items-center justify-center rounded-lg bg-ember px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-ember-dark"
           >
             Accept invitation
           </button>

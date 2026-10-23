@@ -38,7 +38,7 @@ export function RunPoller({ status }: { status: string }) {
   return (
     <p
       aria-live="polite"
-      className="inline-flex items-center gap-2 rounded-full bg-info-soft px-3 py-1 text-xs text-info"
+      className="inline-flex items-center gap-2 rounded-lg bg-info-soft px-3 py-1 text-xs text-info"
     >
       <span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse rounded-full bg-info" />
       Waiting for the runner — this page refreshes automatically (bounded to about 2 minutes).

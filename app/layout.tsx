@@ -20,17 +20,20 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="flex min-h-full flex-col bg-paper font-sans text-ink antialiased">
         <a
           href="#skip"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-paper"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-ember focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
         >
           Skip to content
         </a>
 
         <header className="sticky top-0 z-40 border-b border-line/70 bg-paper/80 backdrop-blur">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-8">
-            <a href="/" className="group flex items-baseline gap-2">
+            <a
+              href={signedIn ? '/' : '/welcome'}
+              className="group flex shrink-0 items-baseline gap-2 whitespace-nowrap"
+            >
               <span className="text-lg font-semibold tracking-tight text-ink">RelayCheck</span>
               <span className="h-1.5 w-1.5 rounded-full bg-ember transition-transform group-hover:scale-150" />
-              <span className="hidden text-[11px] uppercase tracking-[0.18em] text-muted sm:inline">
+              <span className="hidden whitespace-nowrap text-[11px] uppercase tracking-[0.18em] text-muted sm:inline">
                 webhook regression lab
               </span>
             </a>
@@ -55,7 +58,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                         </li>
                       ) : null}
                     </>
-                  ) : null}
+                  ) : (
+                    <li>
+                      <NavLink href="/welcome">Overview</NavLink>
+                    </li>
+                  )}
                 </ul>
               </nav>
 
@@ -70,7 +77,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                         id="workspaceId"
                         name="workspaceId"
                         defaultValue={auth.user?.workspaceId}
-                        className="max-w-[190px] rounded-full border border-line bg-surface px-3 py-1.5 text-xs text-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                        className="max-w-[190px] rounded-lg border border-line bg-surface px-3 py-1.5 text-xs text-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
                       >
                         {workspaces.map((workspace) => (
                           <option key={workspace.id} value={workspace.id}>
@@ -80,30 +87,44 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                       </select>
                       <button
                         type="submit"
-                        className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:border-ink/40 hover:text-ink"
+                        className="rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:border-ember-border hover:text-ink"
                       >
                         Switch
                       </button>
                     </form>
                   ) : (
-                    <span className="max-w-[190px] truncate text-xs text-muted" title={auth.user?.workspaceName}>
+                    <span
+                      className="hidden max-w-[190px] truncate text-xs text-muted 2xl:inline"
+                      title={auth.user?.workspaceName}
+                    >
                       {auth.user?.workspaceName}
                     </span>
                   )}
-                  <span className="max-w-[180px] truncate text-xs text-muted" title={auth.user?.email}>
+                  <span
+                    className="hidden max-w-[180px] truncate text-xs text-muted md:inline"
+                    title={auth.user?.email}
+                  >
                     {auth.user?.email}
                   </span>
                   <form action={logoutAction}>
                     <button
                       type="submit"
-                      className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:border-ink/40 hover:text-ink"
+                      className="rounded-lg border border-line bg-surface px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:border-ember-border hover:text-ink"
                     >
                       Sign out
                     </button>
                   </form>
                 </div>
               ) : auth.authRequired ? (
-                <NavLink href="/login">Sign in</NavLink>
+                <div className="flex items-center gap-2">
+                  <NavLink href="/login">Sign in</NavLink>
+                  <a
+                    href="/register"
+                    className="hidden rounded-lg bg-ember px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-ember-dark sm:inline-flex"
+                  >
+                    Get started
+                  </a>
+                </div>
               ) : null}
             </div>
           </div>
