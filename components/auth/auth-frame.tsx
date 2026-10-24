@@ -37,7 +37,7 @@ export function AuthFrame({ mode, children }: { mode: AuthMode; children: ReactN
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_0%,rgba(201,79,22,0.09),transparent_56%)]" />
       <div className="auth-page__inner mx-auto flex h-full w-full max-w-[1120px] flex-col">
         <header className="auth-page__header mb-2 flex h-9 shrink-0 items-center px-1">
-          <Link href="/welcome" className="group inline-flex items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember">
+          <Link href="/" className="group inline-flex items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember">
             <BrandMark />
             <span className="text-[16px] font-semibold tracking-[-0.04em] text-ink">RelayCheck</span>
           </Link>

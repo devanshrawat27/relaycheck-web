@@ -38,10 +38,14 @@ async function waitForFirstRunStatus(page: Page, status: string): Promise<void> 
     .toBeGreaterThan(0);
 }
 
-test('unauthenticated visitors are redirected to sign in', async ({ page }) => {
+test('unauthenticated visitors see the landing at / and /runs requires sign in', async ({ page }) => {
   await page.goto('/');
+  await expect(
+    page.getByRole('heading', { level: 1, name: /ship webhook integrations with confidence/i }),
+  ).toBeVisible();
+
+  await page.goto('/runs');
   await expect(page).toHaveURL(/\/login/);
-  await expect(page.getByRole('heading', { name: 'Welcome back.' })).toBeVisible();
 });
 
 test('register, run the duplicate scenario, and inspect passed evidence', async ({ page }) => {

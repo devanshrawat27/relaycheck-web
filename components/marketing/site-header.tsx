@@ -51,7 +51,7 @@ export function MarketingHeader() {
 
       <div className="mx-auto flex h-[64px] w-full max-w-6xl items-center justify-between gap-6 px-4 sm:px-8">
         <Link
-          href="/welcome"
+          href="/"
           className="group flex shrink-0 items-center gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember/40 focus-visible:ring-offset-2"
         >
           <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-ember text-white shadow-xs transition-transform group-hover:scale-105">

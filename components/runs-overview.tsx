@@ -1,14 +1,12 @@
 import { RunsOverviewContent } from '@/components/runs-overview-content';
 import { getRunsPage, isRunStatus, type RunListItem, type RunStatus } from '@/lib/api';
-import { requireSession } from '@/lib/session';
+import { sessionToken } from '@/lib/session';
 
-export const dynamic = 'force-dynamic';
-
-interface OverviewPageProps {
+interface RunsOverviewProps {
   searchParams?: { status?: string | string[]; cursor?: string | string[] };
 }
 
-export default async function RunsOverviewPage({ searchParams }: OverviewPageProps) {
+export async function RunsOverview({ searchParams }: RunsOverviewProps) {
   const requested = Array.isArray(searchParams?.status)
     ? searchParams.status[0]
     : searchParams?.status;
@@ -17,7 +15,7 @@ export default async function RunsOverviewPage({ searchParams }: OverviewPagePro
     ? searchParams.cursor[0]
     : searchParams?.cursor;
 
-  const { token } = await requireSession();
+  const token = sessionToken();
 
   let runs: RunListItem[] = [];
   let nextCursor: string | null = null;

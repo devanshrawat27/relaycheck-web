@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 const REPO = 'https://github.com/devanshrawat27/relaycheck-web';
 
 test('the public landing explains the product with working destinations', async ({ page }) => {
-  await page.goto('/welcome');
+  await page.goto('/');
 
   await expect(
     page.getByRole('heading', { level: 1, name: /ship webhook integrations with confidence/i }),
@@ -31,7 +31,7 @@ test('the public landing explains the product with working destinations', async 
 
 test('the landing does not overflow a 390px viewport and the menu works', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/welcome');
+  await page.goto('/');
 
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - window.innerWidth,
