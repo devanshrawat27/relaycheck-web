@@ -11,9 +11,9 @@ import {
 export const dynamic = 'force-dynamic';
 
 const ROLE_BADGE: Record<string, string> = {
-  owner: 'bg-ember-soft text-ember-dark',
-  admin: 'bg-info-soft text-info',
-  member: 'bg-line/50 text-muted',
+  owner: 'border-ember-border bg-ember-soft text-ember-dark',
+  admin: 'border-info-border bg-info-soft text-info-dark',
+  member: 'border-line bg-sand/60 text-muted',
 };
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -53,39 +53,42 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
   const canManageRoles = role === 'owner';
 
   return (
-    <section aria-labelledby="workspace-heading" className="space-y-10">
-      <div className="space-y-3">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember-dark">
-          RelayCheck / Workspace
-        </p>
+    <section aria-labelledby="workspace-heading" className="space-y-8">
+      {/* Page Header */}
+      <div className="space-y-2 border-b border-line/70 pb-6">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ember-dark">
+            RelayCheck / Workspace
+          </p>
+          <span className="rounded-full border border-line bg-sand/60 px-2.5 py-0.5 font-mono text-[11px] text-muted">
+            Your role: <span className="font-semibold text-ink">{role}</span>
+          </span>
+        </div>
         <h1
           id="workspace-heading"
-          className="max-w-3xl break-words font-display text-4xl font-normal leading-[1.05] tracking-tight text-ink sm:text-5xl"
+          className="max-w-3xl truncate font-display text-3xl font-normal tracking-tight text-ink sm:text-4xl"
         >
           {data?.workspaceName ?? 'Workspace'}
         </h1>
-        <p className="max-w-xl text-sm leading-relaxed text-muted">
+        <p className="max-w-xl text-xs leading-relaxed text-muted">
           Members only see runs from this workspace. Roles: owners manage everything, admins
           manage members, members create and inspect runs.
-        </p>
-        <p className="text-xs text-muted">
-          Your role: <span className="font-mono text-ink">{role}</span>
         </p>
       </div>
 
       {errorCode ? (
-        <p role="alert" className="rounded-xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger">
+        <p role="alert" className="rounded-xl border border-danger-border bg-danger-soft px-4 py-3 text-xs text-danger-dark">
           {ERROR_MESSAGES[errorCode] ?? 'Action failed.'}
         </p>
       ) : null}
 
       {invited ? (
         <div className="rounded-xl border border-line bg-surface p-5 shadow-card">
-          <h2 className="text-sm font-semibold text-ink">Invitation created</h2>
+          <h2 className="text-xs font-semibold text-ink">Invitation created</h2>
           <p className="mt-1 text-xs text-muted">
             Share this one-time link (valid 7 days). It joins the recipient to this workspace.
           </p>
-          <code className="mt-3 block select-all break-all rounded-lg bg-sand px-3 py-2 font-mono text-xs text-ink">
+          <code className="mt-3 block select-all break-all rounded-lg border border-line bg-sand/50 px-3 py-2 font-mono text-xs text-ink">
             /join?token={invited}
           </code>
         </div>
@@ -98,12 +101,12 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
           hint="Make sure the Control API is running with AUTH_REQUIRED=true."
         />
       ) : data ? (
-        <>
+        <div className="space-y-8">
           {canInvite ? (
-            <section aria-labelledby="invite-heading" className="space-y-4">
+            <section aria-labelledby="invite-heading" className="space-y-3">
               <h2
                 id="invite-heading"
-                className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted"
+                className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted"
               >
                 Invite a member
               </h2>
@@ -120,10 +123,10 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
                     name="email"
                     type="email"
                     placeholder="teammate@example.com"
-                    className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                    className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-xs text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ember"
                   />
                 </div>
-                <div className="space-y-1.5">
+                <div className="space-y-1.5 sm:w-36">
                   <label htmlFor="invite-role" className="block text-xs font-medium text-muted">
                     Role
                   </label>
@@ -131,7 +134,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
                     id="invite-role"
                     name="role"
                     defaultValue="member"
-                    className="rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                    className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-xs text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ember"
                   >
                     <option value="member">Member</option>
                     <option value="admin">Admin</option>
@@ -139,7 +142,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
                 </div>
                 <button
                   type="submit"
-                  className="rounded-lg bg-ember px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-ember-dark"
+                  className="rounded-lg bg-ember px-4 py-2 text-xs font-semibold text-white transition-all hover:bg-ember-dark active:scale-95"
                 >
                   Create invite
                 </button>
@@ -147,10 +150,10 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
             </section>
           ) : null}
 
-          <section aria-labelledby="members-heading" className="space-y-4">
+          <section aria-labelledby="members-heading" className="space-y-3">
             <h2
               id="members-heading"
-              className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted"
+              className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted"
             >
               Members
             </h2>
@@ -159,28 +162,35 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
                 <table className="w-full min-w-[640px] border-collapse text-left">
                   <caption className="sr-only">Workspace members</caption>
                   <thead>
-                    <tr className="border-b border-line bg-sand/60">
-                      {['Email', 'Role', 'Joined', 'Actions'].map((heading) => (
+                    <tr className="border-b border-line bg-sand/50">
+                      {['Member', 'Role', 'Joined', 'Actions'].map((heading) => (
                         <th
                           key={heading}
                           scope="col"
-                          className="px-5 py-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted"
+                          className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-muted"
                         >
                           {heading}
                         </th>
                       ))}
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-line/60">
                     {data.members.map((member) => (
                       <tr
                         key={member.userId}
-                        className="border-b border-line/60 transition-colors last:border-b-0 hover:bg-sand/40"
+                        className="transition-colors hover:bg-sand/20"
                       >
-                        <td className="px-5 py-3.5 text-sm text-ink">{member.email}</td>
+                        <td className="px-5 py-3.5">
+                          <div className="flex items-center gap-2.5">
+                            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-sand font-mono text-[10px] font-bold text-ink">
+                              {member.email.charAt(0).toUpperCase()}
+                            </span>
+                            <span className="text-xs font-medium text-ink">{member.email}</span>
+                          </div>
+                        </td>
                         <td className="px-5 py-3.5">
                           <span
-                            className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${
+                            className={`inline-flex rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-semibold ${
                               ROLE_BADGE[member.role] ?? ROLE_BADGE.member
                             }`}
                           >
@@ -210,7 +220,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
                                 </select>
                                 <button
                                   type="submit"
-                                  className="rounded-lg border border-line px-2.5 py-1 text-xs text-muted hover:border-ember-border hover:text-ink"
+                                  className="rounded-lg border border-line px-2.5 py-1 text-xs font-medium text-muted hover:border-line hover:text-ink"
                                 >
                                   Update
                                 </button>
@@ -221,7 +231,7 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
                                 <input type="hidden" name="userId" value={member.userId} />
                                 <button
                                   type="submit"
-                                  className="rounded-lg border border-danger/25 px-2.5 py-1 text-xs text-danger hover:bg-danger-soft"
+                                  className="rounded-lg border border-danger-border px-2.5 py-1 text-xs font-medium text-danger hover:bg-danger-soft"
                                 >
                                   Remove
                                 </button>
@@ -241,11 +251,14 @@ export default async function WorkspacePage({ searchParams }: WorkspacePageProps
               </p>
             ) : null}
           </section>
-        </>
+        </div>
       ) : null}
 
       <p className="text-xs text-muted">
-        Need another workspace? <Link href="/register" className="text-ember-dark underline-offset-4 hover:underline">Create an account</Link>{' '}
+        Need another workspace?{' '}
+        <Link href="/register" className="font-medium text-ember-dark underline-offset-4 hover:underline">
+          Create an account
+        </Link>{' '}
         gives each user a personal workspace; join others via invitation links.
       </p>
     </section>

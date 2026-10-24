@@ -1,5 +1,6 @@
-import Link from 'next/link';
 import { loginAction } from '@/lib/auth-actions';
+import { AuthFrame } from '@/components/auth/auth-frame';
+import { ArrowRight } from '@/components/marketing/icons';
 
 const ERROR_MESSAGES: Record<string, string> = {
   'invalid-credentials': 'Invalid email or password.',
@@ -17,68 +18,44 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
   const errorMessage = raw ? (ERROR_MESSAGES[raw] ?? 'Sign-in failed.') : null;
 
   return (
-    <section className="mx-auto max-w-md space-y-8 py-6">
-      <div className="space-y-3">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember-dark">
-          RelayCheck / Sign in
-        </p>
-        <h1 className="font-display text-4xl font-normal leading-[1.05] tracking-tight text-ink">
-          Welcome back.
-        </h1>
-        <p className="text-sm leading-relaxed text-muted">
-          Sign in to run scenarios and inspect evidence in your workspace.
-        </p>
-      </div>
-
+    <AuthFrame mode="login">
       {errorMessage ? (
-        <p
-          role="alert"
-          className="rounded-xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger"
-        >
+        <p role="alert" className="mb-5 rounded-xl border border-danger-border bg-danger-soft px-4 py-3 text-[13px] leading-relaxed text-danger-dark">
           {errorMessage}
         </p>
       ) : null}
-
-      <form action={loginAction} className="space-y-5 rounded-xl border border-line bg-surface p-6 shadow-card">
+      <form action={loginAction} className="space-y-5">
         <div className="space-y-2">
-          <label htmlFor="email" className="block text-sm font-medium text-ink">
-            Email
-          </label>
+          <label htmlFor="email" className="block text-[12px] font-semibold text-[#37332E]">Email address</label>
           <input
             id="email"
             name="email"
             type="email"
             autoComplete="email"
+            placeholder="you@company.com"
             required
-            className="w-full rounded-lg border border-line bg-surface px-3.5 py-2.5 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+            className="h-[50px] w-full rounded-xl border border-[#E6DED4] bg-[#FFFEFC] px-4 text-[14px] text-ink shadow-[inset_0_1px_2px_rgba(49,38,27,0.025)] placeholder:text-[#AAA197] transition-[border-color,box-shadow] hover:border-[#D9C7B5] focus:border-ember focus:outline-none focus:ring-4 focus:ring-ember/10"
           />
         </div>
         <div className="space-y-2">
-          <label htmlFor="password" className="block text-sm font-medium text-ink">
-            Password
-          </label>
+          <div className="flex items-center justify-between gap-3">
+            <label htmlFor="password" className="block text-[12px] font-semibold text-[#37332E]">Password</label>
+            <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#938A80]">Keep it secure</span>
+          </div>
           <input
             id="password"
             name="password"
             type="password"
             autoComplete="current-password"
             required
-            className="w-full rounded-lg border border-line bg-surface px-3.5 py-2.5 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+            className="h-[50px] w-full rounded-xl border border-[#E6DED4] bg-[#FFFEFC] px-4 text-[14px] text-ink shadow-[inset_0_1px_2px_rgba(49,38,27,0.025)] transition-[border-color,box-shadow] hover:border-[#D9C7B5] focus:border-ember focus:outline-none focus:ring-4 focus:ring-ember/10"
           />
         </div>
-        <button
-          type="submit"
-          className="inline-flex w-full items-center justify-center rounded-lg bg-ember px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-ember-dark"
-        >
-          Sign in
+        <button type="submit" className="group inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-[#C94F16] px-5 text-[13px] font-semibold text-white shadow-[0_8px_18px_-10px_rgba(168,61,16,0.8)] transition-[transform,background-color,box-shadow] hover:-translate-y-0.5 hover:bg-[#A83D10] hover:shadow-[0_12px_24px_-12px_rgba(168,61,16,0.85)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ember active:translate-y-0">
+          Sign in to your workspace
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </button>
-        <p className="text-center text-xs text-muted">
-          No account?{' '}
-          <Link href="/register" className="text-ember-dark underline-offset-4 hover:underline">
-            Create one
-          </Link>
-        </p>
       </form>
-    </section>
+    </AuthFrame>
   );
 }

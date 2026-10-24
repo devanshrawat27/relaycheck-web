@@ -4,6 +4,7 @@ interface StatusStyle {
   label: string;
   icon: string;
   className: string;
+  dotColor?: string;
 }
 
 /**
@@ -14,27 +15,27 @@ const STATUS_STYLES: Record<RunStatus, StatusStyle> = {
   queued: {
     label: 'Queued',
     icon: '•',
-    className: 'border-line bg-sand text-muted',
+    className: 'border-line bg-sand/70 text-muted',
   },
   running: {
     label: 'Running',
     icon: '↻',
-    className: 'border-info/20 bg-info-soft text-info',
+    className: 'border-info-border bg-info-soft text-info-dark animate-pulse',
   },
   passed: {
     label: 'Passed',
     icon: '✓',
-    className: 'border-success/20 bg-success-soft text-success',
+    className: 'border-success-border bg-success-soft text-success-dark',
   },
   failed: {
     label: 'Failed',
     icon: '✕',
-    className: 'border-danger/20 bg-danger-soft text-danger',
+    className: 'border-danger-border bg-danger-soft text-danger-dark',
   },
   error: {
     label: 'Error',
     icon: '!',
-    className: 'border-warn/20 bg-warn-soft text-warn',
+    className: 'border-warn-border bg-warn-soft text-warn-dark',
   },
 };
 
@@ -42,11 +43,11 @@ export function StatusBadge({ status, size = 'md' }: { status: RunStatus; size?:
   const style = STATUS_STYLES[status];
   return (
     <span
-      className={`inline-flex items-center gap-2 rounded-lg border font-semibold ${style.className} ${
-        size === 'lg' ? 'px-4 py-2 text-sm' : 'px-2.5 py-1 text-xs'
+      className={`inline-flex items-center gap-1.5 rounded-full border font-mono font-medium tracking-tight ${style.className} ${
+        size === 'lg' ? 'px-3.5 py-1 text-xs' : 'px-2.5 py-0.5 text-[11px]'
       }`}
     >
-      <span aria-hidden="true" className="font-mono leading-none">
+      <span aria-hidden="true" className="font-sans font-bold leading-none">
         {style.icon}
       </span>
       <span>{style.label}</span>

@@ -6,10 +6,10 @@ interface RunFiltersProps {
 }
 
 function chipClass(active: boolean): string {
-  return `inline-flex items-center rounded-lg border px-3.5 py-1.5 text-xs font-medium transition-colors ${
+  return `inline-flex min-h-7 items-center rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ember ${
     active
-      ? 'border-ember-border bg-ember-soft text-ember-dark'
-      : 'border-line bg-surface text-muted hover:border-ember-border hover:text-ink'
+      ? 'bg-surface text-ink font-semibold shadow-xs border border-line'
+      : 'text-muted hover:text-ink hover:bg-sand/60'
   }`;
 }
 
@@ -18,13 +18,12 @@ function statusLabel(status: RunStatus): string {
 }
 
 /**
- * Simple server-rendered status filter. Uses plain links so it works
- * without client JavaScript and stays keyboard accessible.
+ * Clean segmented status filter bar. Uses plain links for SSR and accessibility.
  */
 export function RunFilters({ active }: RunFiltersProps) {
   return (
-    <nav aria-label="Filter runs by status">
-      <ul className="flex flex-wrap items-center gap-2">
+    <nav aria-label="Filter runs by status" className="max-w-full overflow-x-auto rounded-lg border border-line bg-sand/40 p-1">
+      <ul className="flex w-max flex-nowrap items-center gap-0.5">
         <li>
           <Link href="/" aria-current={!active ? 'page' : undefined} className={chipClass(!active)}>
             All

@@ -8,12 +8,12 @@ export function formatDuration(durationMs: number | null): string {
 }
 
 const HEADER_CLASS =
-  'px-5 py-3 text-left text-[10px] font-semibold uppercase tracking-[0.16em] text-muted';
+  'px-5 py-3.5 text-left font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-muted';
 
 export function AssertionsTable({ assertions }: { assertions: AssertionResult[] }) {
   if (assertions.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-line bg-sand/40 px-5 py-6 text-sm text-muted">
+      <div className="rounded-xl border border-dashed border-line bg-sand/30 px-5 py-6 text-xs text-muted">
         No assertions recorded for this run.
       </div>
     );
@@ -24,7 +24,7 @@ export function AssertionsTable({ assertions }: { assertions: AssertionResult[] 
         <table className="w-full min-w-[560px] border-collapse">
           <caption className="sr-only">Assertion results</caption>
           <thead>
-            <tr className="border-b border-line bg-sand/60">
+            <tr className="border-b border-line bg-sand/50">
               <th scope="col" className={HEADER_CLASS}>
                 Assertion
               </th>
@@ -39,28 +39,36 @@ export function AssertionsTable({ assertions }: { assertions: AssertionResult[] 
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-line/60">
             {assertions.map((assertion) => (
               <tr
                 key={assertion.id}
-                className="border-b border-line/60 transition-colors last:border-b-0 hover:bg-sand/40"
+                className="transition-colors hover:bg-sand/20"
               >
-                <td className="px-5 py-3.5 font-mono text-xs text-ink">{assertion.name}</td>
-                <td className="px-5 py-3.5 font-mono text-xs text-muted">{assertion.expected}</td>
+                <td className="px-5 py-3.5 font-mono text-xs font-medium text-ink">
+                  {assertion.name}
+                </td>
+                <td className="px-5 py-3.5 font-mono text-xs text-muted">
+                  {assertion.expected}
+                </td>
                 <td
-                  className={`px-5 py-3.5 font-mono text-xs ${
-                    assertion.passed ? 'text-muted' : 'text-danger'
+                  className={`px-5 py-3.5 font-mono text-xs font-semibold ${
+                    assertion.passed ? 'text-ink' : 'text-danger'
                   }`}
                 >
                   {assertion.actual}
                 </td>
                 <td className="px-5 py-3.5">
                   <span
-                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
-                      assertion.passed ? 'bg-success-soft text-success' : 'bg-danger-soft text-danger'
+                    className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 font-mono text-[11px] font-semibold ${
+                      assertion.passed
+                        ? 'border border-success-border bg-success-soft text-success-dark'
+                        : 'border border-danger-border bg-danger-soft text-danger-dark'
                     }`}
                   >
-                    <span aria-hidden="true">{assertion.passed ? '✓' : '✕'}</span>
+                    <span aria-hidden="true" className="font-bold">
+                      {assertion.passed ? '✓' : '✕'}
+                    </span>
                     <span>{assertion.passed ? 'Passed' : 'Failed'}</span>
                   </span>
                 </td>
@@ -75,9 +83,9 @@ export function AssertionsTable({ assertions }: { assertions: AssertionResult[] 
 
 function OutcomePill({ outcome }: { outcome: DeliveryAttempt['outcome'] }) {
   const styles: Record<DeliveryAttempt['outcome'], string> = {
-    delivered: 'bg-success-soft text-success',
-    timeout: 'bg-warn-soft text-warn',
-    error: 'bg-danger-soft text-danger',
+    delivered: 'border-success-border bg-success-soft text-success-dark',
+    timeout: 'border-warn-border bg-warn-soft text-warn-dark',
+    error: 'border-danger-border bg-danger-soft text-danger-dark',
   };
   const icons: Record<DeliveryAttempt['outcome'], string> = {
     delivered: '✓',
@@ -86,9 +94,9 @@ function OutcomePill({ outcome }: { outcome: DeliveryAttempt['outcome'] }) {
   };
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${styles[outcome]}`}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[11px] font-medium ${styles[outcome]}`}
     >
-      <span aria-hidden="true">{icons[outcome]}</span>
+      <span aria-hidden="true" className="font-bold">{icons[outcome]}</span>
       <span>{outcome}</span>
     </span>
   );
@@ -97,7 +105,7 @@ function OutcomePill({ outcome }: { outcome: DeliveryAttempt['outcome'] }) {
 export function AttemptsTable({ attempts }: { attempts: DeliveryAttempt[] }) {
   if (attempts.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-line bg-sand/40 px-5 py-6 text-sm text-muted">
+      <div className="rounded-xl border border-dashed border-line bg-sand/30 px-5 py-6 text-xs text-muted">
         No delivery attempts recorded yet.
       </div>
     );
@@ -108,7 +116,7 @@ export function AttemptsTable({ attempts }: { attempts: DeliveryAttempt[] }) {
         <table className="w-full min-w-[720px] border-collapse">
           <caption className="sr-only">Delivery attempts</caption>
           <thead>
-            <tr className="border-b border-line bg-sand/60">
+            <tr className="border-b border-line bg-sand/50">
               {['#', 'Event ID', 'HTTP', 'Outcome', 'Duration', 'Detail'].map((heading) => (
                 <th key={heading} scope="col" className={HEADER_CLASS}>
                   {heading}
@@ -116,19 +124,19 @@ export function AttemptsTable({ attempts }: { attempts: DeliveryAttempt[] }) {
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-line/60">
             {attempts.map((attempt) => (
               <tr
                 key={attempt.id}
-                className="border-b border-line/60 transition-colors last:border-b-0 hover:bg-sand/40"
+                className="transition-colors hover:bg-sand/20"
               >
-                <td className="px-5 py-3.5 font-mono text-xs text-ink">
-                  {attempt.attemptNumber}
+                <td className="px-5 py-3.5 font-mono text-xs font-semibold text-ink">
+                  #{attempt.attemptNumber}
                 </td>
-                <td className="max-w-[240px] truncate px-5 py-3.5 font-mono text-xs text-muted">
+                <td className="max-w-[240px] truncate px-5 py-3.5 font-mono text-xs text-muted" title={attempt.eventId}>
                   {attempt.eventId}
                 </td>
-                <td className="px-5 py-3.5 font-mono text-xs text-ink">
+                <td className="px-5 py-3.5 font-mono text-xs font-bold text-ink">
                   {attempt.httpStatus ?? '—'}
                 </td>
                 <td className="px-5 py-3.5">

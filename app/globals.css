@@ -8,31 +8,34 @@
 
 html {
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: theme('colors.paper');
   background-image: radial-gradient(
-    1100px 420px at 50% -220px,
-    rgba(201, 79, 22, 0.08),
+    900px 360px at 50% -120px,
+    rgba(201, 79, 22, 0.05),
     transparent 70%
   );
   background-repeat: no-repeat;
+  color: theme('colors.ink.DEFAULT');
 }
 
 ::selection {
-  background: theme('colors.ember.DEFAULT');
-  color: #ffffff;
+  background: theme('colors.ember.soft');
+  color: theme('colors.ember.dark');
 }
 
-/* Consistent, visible focus for keyboard users. */
+/* Accessible, crisp focus rings */
 :focus-visible {
   outline: 2px solid theme('colors.ember.DEFAULT');
   outline-offset: 2px;
 }
 
-/* Respect users who prefer reduced motion (DESIGN.md accessibility rule). */
+/* Respect user preferences */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -42,4 +45,83 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+:where(section[id]) {
+  scroll-margin-top: 5.5rem;
+}
+
+@media (max-height: 720px) and (max-width: 1023px) {
+  .auth-page {
+    padding-block: 6px;
+  }
+
+  .auth-page__header {
+    height: 32px;
+    margin-bottom: 6px;
+  }
+
+  .auth-page__card {
+    grid-template-rows: 28% 72%;
+  }
+
+  .auth-page__left,
+  .auth-page__right {
+    padding-block: 8px;
+  }
+
+  .auth-page__left-title {
+    margin-top: 8px;
+    font-size: clamp(1.4rem, 4vh, 2rem);
+  }
+
+  .auth-page__left-description,
+  .auth-page__right-description,
+  .auth-page__footer-proof {
+    display: none;
+  }
+
+  .auth-page__form-title {
+    margin-top: 5px;
+    font-size: clamp(1.55rem, 4.2vh, 2.1rem);
+  }
+
+  .auth-page__right > div > div {
+    margin-top: 10px;
+  }
+
+  .auth-page__right form > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 10px;
+  }
+
+  .auth-page__right form input {
+    height: 40px;
+  }
+
+  .auth-page__right form button {
+    height: 44px;
+  }
+
+  .auth-page__right > div > p:last-of-type {
+    margin-top: 10px;
+  }
+}
+
+/* Custom scrollbars for data tables and code */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: theme('colors.line.DEFAULT');
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.stone');
 }

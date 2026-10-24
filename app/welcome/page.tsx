@@ -1,24 +1,39 @@
 import type { Metadata } from 'next';
-import { LandingHero } from '@/components/landing/landing-hero';
-import { LandingWorkflow } from '@/components/landing/landing-workflow';
-import { LandingProduct } from '@/components/landing/landing-product';
-import { LandingEvidence } from '@/components/landing/landing-evidence';
-import { LandingCta } from '@/components/landing/landing-cta';
+import { MotionConfig } from 'framer-motion';
+import { MarketingHeader } from '@/components/marketing/site-header';
+import { MarketingHero } from '@/components/marketing/hero';
+import { MarketingProofStrip } from '@/components/marketing/proof-strip';
+import { MarketingScenarios } from '@/components/marketing/scenarios';
+import { MarketingWorkflow } from '@/components/marketing/workflow';
+import { MarketingEvidence } from '@/components/marketing/evidence';
+import { MarketingFeatures } from '@/components/marketing/features';
+import { MarketingCta } from '@/components/marketing/cta';
+import { MarketingFooter } from '@/components/marketing/site-footer';
+import { MarketingMotion } from '@/components/marketing/marketing-motion';
 
 export const metadata: Metadata = {
-  title: 'Webhook evidence, not assumptions — RelayCheck',
+  title: 'Webhook reliability, verified — RelayCheck',
   description:
-    'Repeatable webhook scenarios that record every delivery attempt and verify the business effect. Local-first, with evidence you can inspect.',
+    'Simulate duplicate deliveries, receiver failures, and timeouts. Verify idempotency and inspect every delivery attempt with evidence you can trust.',
 };
 
 export default function WelcomePage() {
   return (
-    <div className="space-y-0">
-      <LandingHero />
-      <LandingWorkflow />
-      <LandingProduct />
-      <LandingEvidence />
-      <LandingCta />
-    </div>
+    <MotionConfig reducedMotion="user">
+      <div className="relative min-h-screen bg-paper text-ink">
+        <MarketingMotion />
+        <MarketingHeader />
+        <main id="main">
+          <MarketingHero />
+          <MarketingProofStrip />
+          <MarketingScenarios />
+          <MarketingWorkflow />
+          <MarketingEvidence />
+          <MarketingFeatures />
+          <MarketingCta />
+        </main>
+        <MarketingFooter />
+      </div>
+    </MotionConfig>
   );
 }

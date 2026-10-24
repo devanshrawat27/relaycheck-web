@@ -15,10 +15,10 @@ export function NavLink({ href, children }: NavLinkProps) {
     <Link
       href={href}
       aria-current={active ? 'page' : undefined}
-      className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-colors ${
+      className={`relative rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
         active
-          ? 'bg-ember-soft text-ember-dark'
-          : 'text-muted hover:bg-sand hover:text-ink'
+          ? 'bg-sand font-semibold text-ink shadow-xs'
+          : 'text-muted hover:bg-sand/60 hover:text-ink'
       }`}
     >
       {children}

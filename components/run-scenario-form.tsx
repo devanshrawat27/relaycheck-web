@@ -1,30 +1,33 @@
 import { createRunAction } from '@/lib/actions';
 import type { PublicTarget } from '@/lib/api';
 
-const SCENARIOS: { value: string; label: string; description: string; expected: string }[] = [
+const SCENARIOS = [
   {
     value: 'duplicate_delivery',
     label: 'Duplicate delivery',
     description: 'The same event ID is delivered three times to the receiver.',
     expected: 'Expects 3 attempts and exactly 1 business effect.',
+    tag: 'core proof',
   },
   {
     value: 'receiver_failure',
     label: 'Controlled receiver failure',
     description: 'The receiver is made to return a controlled 503.',
     expected: 'Expects that error and no business effect.',
+    tag: 'fault injection',
   },
   {
     value: 'receiver_timeout',
     label: 'Receiver timeout',
     description: 'The receiver is made to respond slower than the client timeout.',
     expected: 'Expects a recorded timeout attempt.',
+    tag: 'latency boundary',
   },
 ];
 
 /**
- * Plain server-action form (no client JavaScript required). It exposes only
- * the scenario selector — never a destination URL.
+ * Plain server-action form (no client JavaScript required).
+ * Exposes scenario selection and bounded overrides — never a destination URL.
  */
 export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
   const targetOptions =
@@ -34,13 +37,14 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
 
   return (
     <form action={createRunAction} className="space-y-8">
+      {/* 1. Scenario Selection */}
       <fieldset className="space-y-4">
-        <legend className="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+        <legend className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">
           Choose a scenario
         </legend>
-        <div className="grid gap-3">
+        <div className="grid gap-3 sm:grid-cols-3">
           {SCENARIOS.map((scenario, index) => (
-            <label key={scenario.value} className="block cursor-pointer">
+            <label key={scenario.value} className="group relative block cursor-pointer">
               <input
                 type="radio"
                 name="scenario"
@@ -48,116 +52,140 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
                 defaultChecked={index === 0}
                 className="peer sr-only"
               />
-              <span className="flex items-start justify-between gap-5 rounded-xl border border-line bg-surface px-5 py-4 transition-colors peer-checked:border-ember-border peer-checked:bg-ember-soft peer-checked:text-ink peer-checked:[&_.dot]:opacity-100 peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-ember hover:border-ember-border">
-                <span className="space-y-1.5">
-                  <span className="block text-sm font-semibold">{scenario.label}</span>
-                  <span className="block text-xs leading-relaxed opacity-70">
+              <div className="flex h-full flex-col justify-between rounded-xl border border-line bg-surface p-4 transition-all hover:border-line hover:shadow-card peer-checked:border-ember-border peer-checked:bg-ember-soft/50 peer-checked:shadow-card peer-focus-visible:ring-2 peer-focus-visible:ring-ember/40">
+                <div>
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="rounded bg-sand px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-muted peer-checked:bg-ember-soft peer-checked:text-ember-dark">
+                      {scenario.tag}
+                    </span>
+                    <span
+                      aria-hidden="true"
+                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-line bg-surface peer-checked:border-ember peer-checked:bg-ember"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-white opacity-0 peer-checked:opacity-100" />
+                    </span>
+                  </div>
+                  <h3 className="mt-3 text-sm font-semibold tracking-tight text-ink">
+                    {scenario.label}
+                  </h3>
+                  <p className="mt-1.5 text-xs leading-relaxed text-muted">
                     {scenario.description}
-                  </span>
-                  <span className="block pt-1 font-mono text-[11px] uppercase tracking-[0.12em] opacity-60">
+                  </p>
+                </div>
+                <div className="mt-4 border-t border-line/60 pt-2.5">
+                  <p className="font-mono text-[10px] text-muted">
                     {scenario.expected}
-                  </span>
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="mt-1 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 border-current opacity-40 transition-opacity"
-                >
-                  <span className="dot h-1.5 w-1.5 rounded-full bg-ember opacity-0 transition-opacity" />
-                </span>
-              </span>
+                  </p>
+                </div>
+              </div>
             </label>
           ))}
         </div>
       </fieldset>
 
-      <section
-        aria-labelledby="preview-heading"
-        className="rounded-xl border border-line bg-surface p-5 shadow-card"
-      >
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">Bounded by design</p>
-        <h2 id="preview-heading" className="mt-1 text-base font-semibold text-ink">
-          What every run guarantees
-        </h2>
-        <dl className="mt-4 grid gap-4 text-sm sm:grid-cols-3">
-          <div>
-            <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">Target</dt>
-            <dd className="mt-1 text-ink/80">Fixed local demo receiver, chosen server-side</dd>
-          </div>
-          <div>
-            <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
-              Parameters
-            </dt>
-            <dd className="mt-1 text-ink/80">Generated per run — never user-controlled</dd>
-          </div>
-          <div>
-            <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">Bounds</dt>
-            <dd className="mt-1 text-ink/80">Bounded attempts, timeouts, and retries</dd>
-          </div>
-        </dl>
-        <p className="mt-4 border-t border-line/70 pt-3 text-xs text-muted">
-          The form cannot target any other host. Fault scenarios require the receiver to run in
-          test mode.
-        </p>
-      </section>
-
-      <section
-        aria-labelledby="target-heading"
-        className="rounded-xl border border-line bg-surface p-5 shadow-card"
-      >
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
-          Delivery target
-        </p>
-        <h2 id="target-heading" className="mt-1 text-base font-semibold text-ink">
-          Configured targets only
-        </h2>
-        <p className="mt-1 text-xs text-muted">
-          The API never accepts a URL. Only targets registered in the server configuration can be
-          selected.
-        </p>
-        <div className="mt-4 space-y-1.5 sm:max-w-sm">
-          <label htmlFor="target" className="block text-xs font-medium text-muted">
-            Target
-          </label>
-          <select
-            id="target"
-            name="target"
-            defaultValue="demo-receiver"
-            className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
-          >
-            {targetOptions.map((target) => (
-              <option key={target.name} value={target.name}>
-                {target.name}
-                {target.kind === 'demo'
-                  ? ' (demo receiver)'
-                  : target.oracle
-                    ? ' (remote, oracle)'
-                    : ' (remote, status only)'}
-              </option>
-            ))}
-          </select>
-          {targetOptions.some((target) => target.kind === 'remote') ? (
-            <p className="text-xs text-warn">
-              Remote targets verify delivery status only; no business-effect oracle is available.
+      {/* 2. Target & Configuration */}
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Delivery Target Section */}
+        <section
+          aria-labelledby="target-heading"
+          className="rounded-xl border border-line bg-surface p-5 shadow-card"
+        >
+          <div className="border-b border-line/70 pb-3">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">
+              Delivery target
             </p>
-          ) : null}
-        </div>
-      </section>
+            <h2 id="target-heading" className="mt-1 text-sm font-semibold text-ink">
+              Configured targets only
+            </h2>
+            <p className="mt-1 text-xs text-muted">
+              The API never accepts a URL. Only pre-configured targets can be chosen.
+            </p>
+          </div>
 
+          <div className="mt-4 space-y-2">
+            <label htmlFor="target" className="block text-xs font-medium text-ink">
+              Target
+            </label>
+            <select
+              id="target"
+              name="target"
+              defaultValue="demo-receiver"
+              className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-xs font-medium text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ember"
+            >
+              {targetOptions.map((target) => (
+                <option key={target.name} value={target.name}>
+                  {target.name}
+                  {target.kind === 'demo'
+                    ? ' (local demo receiver)'
+                    : target.oracle
+                      ? ' (remote with oracle)'
+                      : ' (remote, status only)'}
+                </option>
+              ))}
+            </select>
+            {targetOptions.some((target) => target.kind === 'remote') ? (
+              <p className="text-xs text-warn-dark">
+                Remote targets verify delivery status only; no business-effect oracle is available.
+              </p>
+            ) : null}
+          </div>
+        </section>
+
+        {/* Bounded Safeguards Section */}
+        <section
+          aria-labelledby="preview-heading"
+          className="rounded-xl border border-line bg-sand/30 p-5"
+        >
+          <div className="border-b border-line/70 pb-3">
+            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">
+              Bounded by design
+            </p>
+            <h2 id="preview-heading" className="mt-1 text-sm font-semibold text-ink">
+              What every run guarantees
+            </h2>
+            <p className="mt-1 text-xs text-muted">
+              Safe execution boundaries are enforced server-side.
+            </p>
+          </div>
+
+          <dl className="mt-4 grid grid-cols-3 gap-2.5 text-xs">
+            <div className="rounded-lg border border-line bg-surface p-2.5">
+              <dt className="font-mono text-[9px] uppercase tracking-wider text-muted">Target</dt>
+              <dd className="mt-1 text-ink font-medium">Local receiver</dd>
+            </div>
+            <div className="rounded-lg border border-line bg-surface p-2.5">
+              <dt className="font-mono text-[9px] uppercase tracking-wider text-muted">Parameters</dt>
+              <dd className="mt-1 text-ink font-medium">Generated per run</dd>
+            </div>
+            <div className="rounded-lg border border-line bg-surface p-2.5">
+              <dt className="font-mono text-[9px] uppercase tracking-wider text-muted">Bounds</dt>
+              <dd className="mt-1 text-ink font-medium">Finite timeouts</dd>
+            </div>
+          </dl>
+          <p className="mt-3 text-[11px] text-muted">
+            The form cannot target arbitrary hosts. Fault scenarios require local test mode.
+          </p>
+        </section>
+      </div>
+
+      {/* 3. Advanced Bounded Overrides */}
       <section
         aria-labelledby="advanced-heading"
         className="rounded-xl border border-line bg-surface p-5 shadow-card"
       >
-        <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
-          Advanced (optional)
-        </p>
-        <h2 id="advanced-heading" className="mt-1 text-base font-semibold text-ink">
-          Bounded overrides
-        </h2>
-        <p className="mt-1 text-xs text-muted">
-          Only the fields relevant to the selected scenario are sent. Bounds are enforced
-          server-side; the Control API rejects anything outside them.
-        </p>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+        <div className="border-b border-line/70 pb-3">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">
+            Advanced (optional)
+          </p>
+          <h2 id="advanced-heading" className="mt-1 text-sm font-semibold text-ink">
+            Bounded overrides
+          </h2>
+          <p className="mt-1 text-xs text-muted">
+            Only the fields relevant to the selected scenario are sent. Bounds are enforced server-side.
+          </p>
+        </div>
+
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="space-y-1.5">
             <label htmlFor="deliveryCount" className="block text-xs font-medium text-muted">
               Delivery attempts (duplicate only, 1–5)
@@ -169,7 +197,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
               min={1}
               max={5}
               placeholder="3"
-              className="w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+              className="w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-xs text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ember"
             />
           </div>
           <div className="space-y-1.5">
@@ -184,7 +212,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
               max={15000}
               step={100}
               placeholder="scenario default"
-              className="w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+              className="w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-xs text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ember"
             />
           </div>
           <div className="space-y-1.5">
@@ -198,7 +226,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
               min={400}
               max={599}
               placeholder="503"
-              className="w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+              className="w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-xs text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ember"
             />
           </div>
           <div className="space-y-1.5">
@@ -213,16 +241,17 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
               max={10000}
               step={100}
               placeholder="2000"
-              className="w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-sm text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+              className="w-full rounded-lg border border-line bg-surface px-3 py-2 font-mono text-xs text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ember"
             />
           </div>
         </div>
       </section>
 
-      <div className="flex flex-wrap items-center gap-4">
+      {/* 4. Action Row */}
+      <div className="flex flex-wrap items-center gap-4 border-t border-line/70 pt-6">
         <button
           type="submit"
-          className="inline-flex items-center gap-2 rounded-lg bg-ember px-7 py-3 text-sm font-semibold text-white transition-colors hover:bg-ember-dark"
+          className="inline-flex items-center gap-2 rounded-lg bg-ember px-6 py-2.5 text-xs font-semibold text-white transition-all hover:bg-ember-dark hover:shadow-xs active:scale-95"
         >
           Start run
           <span aria-hidden="true">→</span>

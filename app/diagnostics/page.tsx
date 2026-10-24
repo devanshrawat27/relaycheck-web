@@ -10,55 +10,40 @@ const RECEIVER_BASE = (process.env.DEMO_RECEIVER_URL ?? 'http://127.0.0.1:3100')
 const STATUS_ORDER = ['queued', 'running', 'passed', 'failed', 'error'] as const;
 
 const STATUS_TONE = {
-  queued: 'muted',
-  running: 'info',
-  passed: 'success',
-  failed: 'danger',
-  error: 'warn',
+  queued: 'text-muted',
+  running: 'text-info-dark',
+  passed: 'text-success-dark',
+  failed: 'text-danger-dark',
+  error: 'text-warn-dark',
 } as const;
 
-function Card({
-  label,
-  value,
-  hint,
-  tone = 'default',
+function ServiceCard({
+  name,
+  healthy,
+  target,
 }: {
-  label: string;
-  value: string;
-  hint: string;
-  tone?: 'default' | 'success' | 'info' | 'warn' | 'danger' | 'muted';
+  name: string;
+  healthy: boolean;
+  target: string;
 }) {
-  const toneClass =
-    tone === 'danger'
-      ? 'text-danger'
-      : tone === 'warn'
-        ? 'text-warn'
-        : tone === 'success'
-          ? 'text-success'
-          : tone === 'info'
-            ? 'text-info'
-            : tone === 'muted'
-              ? 'text-muted'
-              : 'text-ink';
   return (
-    <div className="rounded-xl border border-line bg-surface px-5 py-4 shadow-card">
-      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">{label}</p>
-      <p className={`mt-2 font-mono text-2xl font-medium tracking-tight ${toneClass}`}>{value}</p>
-      <p className="mt-1 text-xs text-muted">{hint}</p>
-    </div>
-  );
-}
-
-function HealthRow({ name, healthy, target }: { name: string; healthy: boolean; target: string }) {
-  return (
-    <div className="flex items-center justify-between gap-4 rounded-xl border border-line bg-surface px-5 py-3.5 shadow-card">
-      <div>
-        <p className="text-sm font-semibold text-ink">{name}</p>
-        <p className="font-mono text-xs text-muted">{target}</p>
+    <div className="flex items-center justify-between gap-4 rounded-xl border border-line bg-surface p-4 shadow-card">
+      <div className="space-y-1">
+        <div className="flex items-center gap-2">
+          <span
+            className={`h-2 w-2 rounded-full ${
+              healthy ? 'bg-success animate-pulse' : 'bg-danger'
+            }`}
+          />
+          <p className="text-xs font-semibold text-ink">{name}</p>
+        </div>
+        <p className="font-mono text-[11px] text-muted">{target}</p>
       </div>
       <span
-        className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${
-          healthy ? 'bg-success-soft text-success' : 'bg-danger-soft text-danger'
+        className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 font-mono text-[11px] font-semibold ${
+          healthy
+            ? 'border-success-border bg-success-soft text-success-dark'
+            : 'border-danger-border bg-danger-soft text-danger-dark'
         }`}
       >
         <span aria-hidden="true">{healthy ? '✓' : '✕'}</span>
@@ -97,30 +82,32 @@ export default async function DiagnosticsPage() {
   }
 
   return (
-    <section aria-labelledby="diagnostics-heading" className="space-y-10">
-      <div className="space-y-3">
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-ember-dark">
+    <section aria-labelledby="diagnostics-heading" className="space-y-8">
+      {/* Header */}
+      <div className="space-y-2 border-b border-line/70 pb-6">
+        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-ember-dark">
           RelayCheck / Diagnostics
         </p>
         <h1
           id="diagnostics-heading"
-          className="font-display text-4xl font-normal leading-[1.05] tracking-tight text-ink sm:text-5xl"
+          className="font-display text-3xl font-normal tracking-tight text-ink sm:text-4xl"
         >
           Is the pipeline healthy?
         </h1>
-        <p className="max-w-xl text-sm leading-relaxed text-muted">
+        <p className="max-w-xl text-xs leading-relaxed text-muted">
           Live service health and aggregate counts — queue depth, outbox backlog, and run
           outcomes. Counts only, never payloads.
         </p>
       </div>
 
-      <section aria-labelledby="health-heading" className="space-y-4">
-        <h2 id="health-heading" className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+      {/* Services Health */}
+      <section aria-labelledby="health-heading" className="space-y-3">
+        <h2 id="health-heading" className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
           Services
         </h2>
         <div className="grid gap-3 sm:grid-cols-2">
-          <HealthRow name="Control API" healthy={apiHealthy} target={API_BASE} />
-          <HealthRow name="Demo receiver" healthy={receiverHealthy} target={RECEIVER_BASE} />
+          <ServiceCard name="Control API" healthy={apiHealthy} target={API_BASE} />
+          <ServiceCard name="Demo receiver" healthy={receiverHealthy} target={RECEIVER_BASE} />
         </div>
       </section>
 
@@ -131,59 +118,117 @@ export default async function DiagnosticsPage() {
           hint="Start the Control API (default http://localhost:3200) and reload this page."
         />
       ) : metrics ? (
-        <>
-          <section aria-labelledby="runs-heading" className="space-y-4">
-            <h2 id="runs-heading" className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
+        <div className="space-y-8">
+          {/* Runs by Status */}
+          <section aria-labelledby="runs-heading" className="space-y-3">
+            <h2 id="runs-heading" className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
               Runs by status
             </h2>
-            <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-5">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
               {STATUS_ORDER.map((status) => (
-                <Card
+                <div
                   key={status}
-                  label={status}
-                  value={String(metrics.runs[status] ?? 0)}
-                  hint="persisted runs"
-                  tone={STATUS_TONE[status]}
-                />
+                  className="rounded-xl border border-line bg-surface p-4 shadow-card"
+                >
+                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+                    {status}
+                  </p>
+                  <p className={`mt-2 font-mono text-2xl font-bold tracking-tight ${STATUS_TONE[status]}`}>
+                    {metrics?.runs[status] ?? 0}
+                  </p>
+                  <p className="mt-1 text-[11px] text-muted">persisted runs</p>
+                </div>
               ))}
             </div>
           </section>
 
-          <section aria-labelledby="pipeline-heading" className="space-y-4">
-            <h2 id="pipeline-heading" className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted">
-              Delivery pipeline
-            </h2>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              <Card label="Work queue" value={String(metrics.queues.work)} hint="jobs waiting for the runner" />
-              <Card
-                label="Dead-letter queue"
-                value={String(metrics.queues.deadLetter)}
-                hint="poison or exhausted jobs"
-                tone={metrics.queues.deadLetter > 0 ? 'warn' : 'default'}
-              />
-              <Card
-                label="Outbox pending"
-                value={String(metrics.outbox.pending)}
-                hint={`oldest: ${formatAge(metrics.outbox.oldestPendingAgeMs)}`}
-                tone={metrics.outbox.pending > 0 ? 'warn' : 'default'}
-              />
-              <Card
-                label="Outbox failed"
-                value={String(metrics.outbox.failed)}
-                hint="publish retries exhausted"
-                tone={metrics.outbox.failed > 0 ? 'danger' : 'default'}
-              />
+          {/* Delivery Pipeline */}
+          <section aria-labelledby="pipeline-heading" className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 id="pipeline-heading" className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted">
+                Delivery pipeline
+              </h2>
+              <span className="font-mono text-[10px] text-muted">
+                Snapshot: {new Date(metrics.generatedAt).toLocaleTimeString('en-GB')}
+              </span>
             </div>
-            <p className="text-xs text-muted">
-              Snapshot generated {new Date(metrics.generatedAt).toLocaleString('en-GB')}.
-              {metrics.queues.work < 0
-                ? ' Queue depth unavailable (RabbitMQ unreachable).'
-                : ''}
-            </p>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="rounded-xl border border-line bg-surface p-4 shadow-card">
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">Work queue</p>
+                <p className="mt-2 font-mono text-2xl font-bold text-ink">{metrics.queues.work}</p>
+                <p className="mt-1 text-[11px] text-muted">jobs waiting for runner</p>
+              </div>
+
+              <div
+                className={`rounded-xl border p-4 shadow-card ${
+                  metrics.queues.deadLetter > 0
+                    ? 'border-warn-border bg-warn-soft/40'
+                    : 'border-line bg-surface'
+                }`}
+              >
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+                  Dead-letter queue
+                </p>
+                <p
+                  className={`mt-2 font-mono text-2xl font-bold ${
+                    metrics.queues.deadLetter > 0 ? 'text-warn-dark' : 'text-ink'
+                  }`}
+                >
+                  {metrics.queues.deadLetter}
+                </p>
+                <p className="mt-1 text-[11px] text-muted">poison or exhausted jobs</p>
+              </div>
+
+              <div
+                className={`rounded-xl border p-4 shadow-card ${
+                  metrics.outbox.pending > 0
+                    ? 'border-warn-border bg-warn-soft/40'
+                    : 'border-line bg-surface'
+                }`}
+              >
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+                  Outbox pending
+                </p>
+                <p
+                  className={`mt-2 font-mono text-2xl font-bold ${
+                    metrics.outbox.pending > 0 ? 'text-warn-dark' : 'text-ink'
+                  }`}
+                >
+                  {metrics.outbox.pending}
+                </p>
+                <p className="mt-1 text-[11px] text-muted">
+                  oldest: {formatAge(metrics.outbox.oldestPendingAgeMs)}
+                </p>
+              </div>
+
+              <div
+                className={`rounded-xl border p-4 shadow-card ${
+                  metrics.outbox.failed > 0
+                    ? 'border-danger-border bg-danger-soft/40'
+                    : 'border-line bg-surface'
+                }`}
+              >
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted">
+                  Outbox failed
+                </p>
+                <p
+                  className={`mt-2 font-mono text-2xl font-bold ${
+                    metrics.outbox.failed > 0 ? 'text-danger-dark' : 'text-ink'
+                  }`}
+                >
+                  {metrics.outbox.failed}
+                </p>
+                <p className="mt-1 text-[11px] text-muted">publish retries exhausted</p>
+              </div>
+            </div>
+            {metrics.queues.work < 0 ? (
+              <p className="text-xs text-warn-dark">
+                Queue depth unavailable (RabbitMQ unreachable).
+              </p>
+            ) : null}
           </section>
-        </>
+        </div>
       ) : null}
     </section>
   );
 }
-

@@ -13,3 +13,5 @@ tsconfig.tsbuildinfo
 playwright-report/
 test-results/
 .e2e-stack.json
+.jest-cache/
+.next-landing-review/
