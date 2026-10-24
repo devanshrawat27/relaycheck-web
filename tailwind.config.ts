@@ -12,7 +12,7 @@ const config: Config = {
           DEFAULT: '#1E1D1A',
           secondary: '#4A463F',
         },
-        muted: '#736E65',
+        muted: '#6B665E',
         stone: '#9E988E',
         line: {
           DEFAULT: '#E8E2D8',
@@ -38,7 +38,7 @@ const config: Config = {
           border: '#F7C0C0',
         },
         warn: {
-          DEFAULT: '#B7791F',
+          DEFAULT: '#9A6210',
           dark: '#8C5B14',
           soft: '#FDF6E9',
           border: '#F8DCAC',
