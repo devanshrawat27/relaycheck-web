@@ -13,7 +13,7 @@ async function register(page: Page): Promise<string> {
   await page.goto('/register');
   await page.getByLabel('Email').fill(email);
   await page.getByLabel('Password').fill(PASSWORD);
-  await page.getByRole('button', { name: 'Create account' }).click();
+  await page.getByRole('button', { name: 'Create your workspace' }).click();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole('heading', { name: 'Evidence for every delivery.' })).toBeVisible();
   return email;
@@ -49,7 +49,7 @@ test('register, run the duplicate scenario, and inspect passed evidence', async 
   await startDuplicateRun(page);
   await waitForFirstRunStatus(page, 'Passed');
 
-  await page.locator('tbody tr').first().getByRole('link').click();
+  await page.locator('tbody tr').first().getByRole('link').first().click();
   await expect(page.getByRole('heading', { name: 'duplicate_delivery' })).toBeVisible();
   await expect(page.getByText('Assertions', { exact: true })).toBeVisible();
   await expect(page.getByText('business_effect_applied_once')).toBeVisible();
@@ -69,7 +69,7 @@ test('an assertion failure is shown distinctly from an execution error', async (
     await startDuplicateRun(page);
     await waitForFirstRunStatus(page, 'Failed');
 
-    await page.locator('tbody tr').first().getByRole('link').click();
+    await page.locator('tbody tr').first().getByRole('link').first().click();
     await expect(page.getByRole('heading', { name: 'duplicate_delivery' })).toBeVisible();
     await expect(page.getByText('Assertion failure')).toBeVisible();
     await expect(page.getByText('Failed', { exact: true }).first()).toBeVisible();
