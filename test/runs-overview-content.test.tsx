@@ -56,11 +56,11 @@ describe('RunsOverviewContent', () => {
     );
 
     expect(screen.getByText('duplicate_delivery')).toBeInTheDocument();
-    expect(screen.getByText('Passed')).toBeInTheDocument();
+    expect(screen.getByText('Passed', { selector: 'span' })).toBeInTheDocument();
     expect(screen.getByText('Three deliveries verified against one business effect.')).toBeInTheDocument();
     expect(screen.getByText('1.25 s')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'abc12345' })).toHaveAttribute('href', '/runs/run-2026-abc12345');
-    expect(screen.getByRole('link', { name: 'Details →' })).toHaveAttribute('href', '/runs/run-2026-abc12345');
+    expect(screen.getByRole('link', { name: 'run-2026' })).toHaveAttribute('href', '/runs/run-2026-abc12345');
+    expect(screen.getByRole('link', { name: 'View run run-2026-abc12345' })).toHaveAttribute('href', '/runs/run-2026-abc12345');
     expect(screen.getByRole('link', { name: 'Load older runs' })).toHaveAttribute('href', '/?status=passed&cursor=older-run');
     expect(screen.queryByText('Illustrative · not a recorded run')).not.toBeInTheDocument();
   });

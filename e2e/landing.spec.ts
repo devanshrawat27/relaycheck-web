@@ -6,26 +6,21 @@ test('the public landing explains the product with working destinations', async 
   await page.goto('/welcome');
 
   await expect(
-    page.getByRole('heading', { level: 1, name: /webhooks should just work/i }),
+    page.getByRole('heading', { level: 1, name: /ship webhook integrations with confidence/i }),
   ).toBeVisible();
   await expect(page.getByRole('heading', { name: /test the failures that matter/i })).toBeVisible();
   await expect(
     page.getByRole('heading', { name: /a simple workflow, complete visibility/i }),
   ).toBeVisible();
-  await expect(
-    page.getByRole('heading', { name: /a verdict you can inspect/i }),
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: /a verdict you can inspect/i })).toBeVisible();
   await expect(page.getByRole('heading', { name: /built for the person on call/i })).toBeVisible();
 
-  await expect(page.getByRole('link', { name: /run your first test/i }).first()).toHaveAttribute(
+  await expect(page.locator('#top').getByRole('link', { name: /get started/i })).toHaveAttribute(
     'href',
     '/runs/new',
   );
-  await expect(page.getByRole('link', { name: /explore on github/i })).toHaveAttribute(
-    'href',
-    REPO,
-  );
-  await expect(page.getByRole('link', { name: /get started/i })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: /view on github/i })).toHaveAttribute('href', REPO);
+  await expect(page.locator('header').getByRole('link', { name: /get started/i })).toHaveAttribute(
     'href',
     '/register',
   );
