@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { loginAction } from '@/lib/auth-actions';
 import { AuthFrame } from '@/components/auth/auth-frame';
 import { ArrowRight } from '@/components/marketing/icons';
@@ -40,7 +41,9 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-3">
             <label htmlFor="password" className="block text-[12px] font-semibold text-[#37332E]">Password</label>
-            <span className="font-mono text-[9px] uppercase tracking-[0.1em] text-[#938A80]">Keep it secure</span>
+            <Link href="/forgot-password" className="text-[11px] font-medium text-ember-dark underline-offset-4 hover:underline">
+              Forgot password?
+            </Link>
           </div>
           <input
             id="password"

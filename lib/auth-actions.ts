@@ -84,3 +84,55 @@ export async function logoutAction(): Promise<void> {
   cookies().delete(SESSION_COOKIE);
   redirect('/login');
 }
+
+async function post(path: string, body: unknown): Promise<boolean> {
+  try {
+    const response = await fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body),
+      cache: 'no-store',
+    });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function verifyEmailAction(formData: FormData): Promise<void> {
+  const token = String(formData.get('token') ?? '').trim();
+  if (!token || !(await post('/api/auth/verify-email', { token }))) {
+    redirect('/verify-email?error=invalid');
+  }
+  redirect('/login?verified=1');
+}
+
+export async function resendVerificationAction(formData: FormData): Promise<void> {
+  const email = String(formData.get('email') ?? '').trim();
+  if (!email) {
+    redirect('/verify-email?error=missing');
+  }
+  await post('/api/auth/resend-verification', { email });
+  redirect('/verify-email?sent=1');
+}
+
+export async function forgotPasswordAction(formData: FormData): Promise<void> {
+  const email = String(formData.get('email') ?? '').trim();
+  if (!email) {
+    redirect('/forgot-password?error=missing');
+  }
+  await post('/api/auth/forgot-password', { email });
+  redirect('/login?sent=1');
+}
+
+export async function resetPasswordAction(formData: FormData): Promise<void> {
+  const token = String(formData.get('token') ?? '').trim();
+  const password = String(formData.get('password') ?? '');
+  if (!token || password.length < 8) {
+    redirect('/reset-password?error=invalid');
+  }
+  if (!(await post('/api/auth/reset-password', { token, password }))) {
+    redirect('/reset-password?error=invalid');
+  }
+  redirect('/login?reset=1');
+}
