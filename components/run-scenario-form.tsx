@@ -44,7 +44,7 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
         </legend>
         <div className="grid gap-3 sm:grid-cols-3">
           {SCENARIOS.map((scenario, index) => (
-            <label key={scenario.value} className="group relative block cursor-pointer">
+            <label key={scenario.value} className="scenario-option group relative block cursor-pointer">
               <input
                 type="radio"
                 name="scenario"
@@ -52,28 +52,28 @@ export function RunScenarioForm({ targets }: { targets: PublicTarget[] }) {
                 defaultChecked={index === 0}
                 className="peer sr-only"
               />
-              <div className="flex h-full flex-col justify-between rounded-xl border border-line bg-surface p-4 transition-all hover:border-line hover:shadow-card peer-checked:border-ember-border peer-checked:bg-ember-soft/50 peer-checked:shadow-card peer-focus-visible:ring-2 peer-focus-visible:ring-ember/40">
+              <div className="scenario-card flex h-full flex-col justify-between rounded-xl border border-line bg-surface p-4 transition-all hover:border-line hover:shadow-card peer-checked:shadow-card">
                 <div>
                   <div className="flex items-center justify-between gap-2">
-                    <span className="rounded bg-sand px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-muted peer-checked:bg-ember-soft peer-checked:text-ember-dark">
+                    <span className="scenario-tag rounded bg-sand px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wider text-muted">
                       {scenario.tag}
                     </span>
                     <span
                       aria-hidden="true"
-                      className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-line bg-surface peer-checked:border-ember peer-checked:bg-ember"
+                      className="scenario-dot flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-line bg-surface"
                     >
-                      <span className="h-1.5 w-1.5 rounded-full bg-white opacity-0 peer-checked:opacity-100" />
+                      <span className="scenario-dot-inner h-1.5 w-1.5 rounded-full bg-white opacity-0" />
                     </span>
                   </div>
-                  <h3 className="mt-3 text-sm font-semibold tracking-tight text-ink">
+                  <h3 className="mt-3 text-[15px] font-semibold leading-snug tracking-tight text-ink">
                     {scenario.label}
                   </h3>
-                  <p className="mt-1.5 text-xs leading-relaxed text-muted">
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
                     {scenario.description}
                   </p>
                 </div>
                 <div className="mt-4 border-t border-line/60 pt-2.5">
-                  <p className="font-mono text-[10px] text-muted">
+                  <p className="font-mono text-[10px] leading-relaxed text-muted">
                     {scenario.expected}
                   </p>
                 </div>

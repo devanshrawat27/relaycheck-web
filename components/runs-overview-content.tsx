@@ -3,6 +3,7 @@ import { ErrorPanel } from '@/components/error-panel';
 import { RunFilters } from '@/components/run-filters';
 import { StatusBadge } from '@/components/status-badge';
 import type { RunListItem, RunStatus } from '@/lib/api';
+import { scenarioLabel } from '@/lib/run-evidence';
 
 interface RunsOverviewContentProps {
   status: RunStatus | undefined;
@@ -89,36 +90,72 @@ function NoMatchesState() {
 
 function RunsTable({ runs }: { runs: RunListItem[] }) {
   return (
-    <div className="overflow-hidden rounded-lg border border-line bg-surface">
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[740px] border-collapse text-left">
-          <caption className="sr-only">Recent scenario runs</caption>
-          <thead>
-            <tr className="border-b border-line bg-sand/45">
-              {['Scenario', 'Run ID', 'Status', 'Created', 'Duration', 'Result', ''].map((heading, index) => (
-                <th key={`${heading}-${index}`} scope="col" className="px-4 py-3 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-muted">{heading}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-line/70">
-            {runs.map((run) => (
-              <tr key={run.id} className="group transition-colors hover:bg-sand/25">
-                <td className="px-4 py-3.5 font-mono text-[11px] font-semibold text-ink">{run.scenario}</td>
-                <td className="px-4 py-3.5 font-mono text-[11px]">
-                  <Link href={`/runs/${run.id}`} title={run.id} className="text-muted underline-offset-4 hover:text-ember-dark hover:underline">{run.id.slice(0, 8)}</Link>
-                </td>
-                <td className="px-4 py-3.5"><StatusBadge status={run.status} /></td>
-                <td className="whitespace-nowrap px-4 py-3.5 text-[11px] text-muted">{formatTimestamp(run.createdAt)}</td>
-                <td className="whitespace-nowrap px-4 py-3.5 font-mono text-[11px] text-muted">{formatDuration(run.durationMs)}</td>
-                <td className="max-w-[280px] px-4 py-3.5 text-xs leading-snug text-muted"><span className="line-clamp-2">{run.summary ?? '—'}</span></td>
-                <td className="px-4 py-3.5 text-right"><Link href={`/runs/${run.id}`} aria-label={`View run ${run.id}`} className="text-xs font-semibold text-ember-dark underline-offset-4 hover:underline">Details →</Link></td>
+    <>
+      {/* Narrow screens: one card per run keeps status, time, and the detail link visible. */}
+      <ul className="space-y-2 sm:hidden">
+        {runs.map((run) => (
+          <li key={run.id} className="overflow-hidden rounded-xl border border-line bg-surface">
+            <Link href={`/runs/${run.id}`} className="block px-4 py-3.5">
+              <div className="flex items-start justify-between gap-3">
+                <span className="text-[15px] font-medium leading-snug text-ink">
+                  {scenarioLabel(run.scenario)}
+                </span>
+                <StatusBadge status={run.status} />
+              </div>
+              <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-muted">
+                {run.id.slice(0, 8)} · {formatTimestamp(run.createdAt)}
+              </p>
+              <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-muted">
+                {run.summary ?? '—'}
+              </p>
+              <div className="mt-2.5 flex items-center justify-between font-mono text-[11px] text-muted">
+                <span>{formatDuration(run.durationMs)}</span>
+                <span className="font-semibold text-ember-dark">Details →</span>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      <div className="hidden overflow-hidden rounded-lg border border-line bg-surface sm:block">
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[740px] border-collapse text-left">
+            <caption className="sr-only">Recent scenario runs</caption>
+            <thead>
+              <tr className="border-b border-line bg-sand/45">
+                {['Scenario', 'Run ID', 'Status', 'Created', 'Duration', 'Result', ''].map((heading, index) => (
+                  <th key={`${heading}-${index}`} scope="col" className={`px-4 py-3 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-muted ${heading === 'Duration' ? 'text-right' : 'text-left'}`}>{heading}</th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-line/70">
+              {runs.map((run) => (
+                <tr key={run.id} className="group transition-colors hover:bg-sand/25">
+                  <td className="px-4 py-3.5">
+                    <Link
+                      href={`/runs/${run.id}`}
+                      title={run.scenario}
+                      className="text-[13px] font-medium text-ink underline-offset-4 hover:text-ember-dark hover:underline"
+                    >
+                      {scenarioLabel(run.scenario)}
+                    </Link>
+                  </td>
+                  <td className="px-4 py-3.5 font-mono text-[11px]">
+                    <Link href={`/runs/${run.id}`} title={run.id} className="text-muted underline-offset-4 hover:text-ember-dark hover:underline">{run.id.slice(0, 8)}</Link>
+                  </td>
+                  <td className="px-4 py-3.5"><StatusBadge status={run.status} /></td>
+                  <td className="whitespace-nowrap px-4 py-3.5 text-[11px] text-muted">{formatTimestamp(run.createdAt)}</td>
+                  <td className="whitespace-nowrap px-4 py-3.5 text-right font-mono text-[11px] tabular-nums text-muted">{formatDuration(run.durationMs)}</td>
+                  <td className="max-w-[300px] px-4 py-3.5 text-xs leading-snug text-muted"><span className="line-clamp-2">{run.summary ?? '—'}</span></td>
+                  <td className="px-4 py-3.5 text-right"><Link href={`/runs/${run.id}`} aria-label={`View run ${run.id}`} className="whitespace-nowrap text-xs font-semibold text-ember-dark underline-offset-4 hover:underline">Details →</Link></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="border-t border-line/70 px-4 py-2 text-[10px] text-muted">Open a run to inspect its recorded attempts, receiver responses, and assertions.</p>
       </div>
-      <p className="border-t border-line/70 px-4 py-2 text-[10px] text-muted">Open a run to inspect its recorded attempts, receiver responses, and assertions.</p>
-    </div>
+    </>
   );
 }
 

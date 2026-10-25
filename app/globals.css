@@ -107,6 +107,28 @@ body {
   }
 }
 
+/* Scenario selection cards: the radio input is visually hidden, so the checked
+   state must be expressed from the input's sibling rather than the input itself. */
+.scenario-option input:checked ~ .scenario-card {
+  border-color: theme('colors.ember.border');
+  background-color: theme('colors.ember.soft');
+}
+.scenario-option input:checked ~ .scenario-card .scenario-tag {
+  background-color: theme('colors.ember.border');
+  color: theme('colors.ember.dark');
+}
+.scenario-option input:checked ~ .scenario-card .scenario-dot {
+  border-color: theme('colors.ember.DEFAULT');
+  background-color: theme('colors.ember.DEFAULT');
+}
+.scenario-option input:checked ~ .scenario-card .scenario-dot-inner {
+  opacity: 1;
+}
+.scenario-option input:focus-visible ~ .scenario-card {
+  outline: 2px solid theme('colors.ember.DEFAULT');
+  outline-offset: 2px;
+}
+
 /* Custom scrollbars for data tables and code */
 ::-webkit-scrollbar {
   width: 6px;

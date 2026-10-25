@@ -54,10 +54,12 @@ test('register, run the duplicate scenario, and inspect passed evidence', async 
   await waitForFirstRunStatus(page, 'Passed');
 
   await page.locator('tbody tr').first().getByRole('link').first().click();
-  await expect(page.getByRole('heading', { name: 'duplicate_delivery' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Duplicate delivery' })).toBeVisible();
+  await expect(page.getByText('3 delivery attempts → 1 business effect')).toBeVisible();
   await expect(page.getByText('Assertions', { exact: true })).toBeVisible();
-  await expect(page.getByText('business_effect_applied_once')).toBeVisible();
-  await expect(page.getByText('delivery_attempt_count')).toBeVisible();
+  const assertions = page.getByRole('table').first();
+  await expect(assertions.getByText('business_effect_applied_once')).toBeVisible();
+  await expect(assertions.getByText('delivery_attempt_count')).toBeVisible();
   await expect(page.getByRole('cell', { name: 'deliveries_accepted' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Delivery attempts' })).toBeVisible();
 });
@@ -74,7 +76,7 @@ test('an assertion failure is shown distinctly from an execution error', async (
     await waitForFirstRunStatus(page, 'Failed');
 
     await page.locator('tbody tr').first().getByRole('link').first().click();
-    await expect(page.getByRole('heading', { name: 'duplicate_delivery' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Duplicate delivery' })).toBeVisible();
     await expect(page.getByText('Assertion failure')).toBeVisible();
     await expect(page.getByText('Failed', { exact: true }).first()).toBeVisible();
     await expect(page.getByRole('cell', { name: 'deliveries_accepted' })).toBeVisible();
