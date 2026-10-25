@@ -11,18 +11,14 @@ API-error states. No fabricated rows anywhere.
 
 ## Demo
 
-<video controls poster="public/media/relaycheck-demo-poster.jpg" width="100%">
-  <source src="public/media/relaycheck-demo.mp4" type="video/mp4" />
-  <a href="public/media/relaycheck-demo.mp4">
-    <img src="public/media/relaycheck-demo-poster.jpg" alt="RelayCheck demo: three delivery attempts, one business effect" width="100%" />
-  </a>
-</video>
+[![Watch the RelayCheck demo](https://i.ytimg.com/vi/amxQqjdwoKQ/maxresdefault.jpg)](https://youtu.be/amxQqjdwoKQ)
 
-55 seconds, recorded from the running app. It shows a real duplicate-delivery
-run (3 attempts → 1 business effect, verified) and the same assertion catching a
-deliberately broken receiver (3 effects, failed).
+<iframe width="960" height="540" src="https://www.youtube.com/embed/amxQqjdwoKQ?autoplay=1&mute=1&loop=1&playlist=amxQqjdwoKQ&rel=0&playsinline=1" title="RelayCheck product demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-[Watch the demo (MP4, 55 s)](public/media/relaycheck-demo.mp4)
+55 seconds, recorded from the running app: a real duplicate-delivery run
+(3 attempts → 1 business effect, verified) and the same assertion catching a
+deliberately broken receiver (3 effects, failed). Also available as
+[MP4](public/media/relaycheck-demo.mp4).
 
 ## Accounts
 
