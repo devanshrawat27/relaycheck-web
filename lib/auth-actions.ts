@@ -99,23 +99,6 @@ async function post(path: string, body: unknown): Promise<boolean> {
   }
 }
 
-export async function verifyEmailAction(formData: FormData): Promise<void> {
-  const token = String(formData.get('token') ?? '').trim();
-  if (!token || !(await post('/api/auth/verify-email', { token }))) {
-    redirect('/verify-email?error=invalid');
-  }
-  redirect('/login?verified=1');
-}
-
-export async function resendVerificationAction(formData: FormData): Promise<void> {
-  const email = String(formData.get('email') ?? '').trim();
-  if (!email) {
-    redirect('/verify-email?error=missing');
-  }
-  await post('/api/auth/resend-verification', { email });
-  redirect('/verify-email?sent=1');
-}
-
 export async function forgotPasswordAction(formData: FormData): Promise<void> {
   const email = String(formData.get('email') ?? '').trim();
   if (!email) {
