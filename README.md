@@ -11,14 +11,13 @@ API-error states. No fabricated rows anywhere.
 
 ## Demo
 
-[![Watch the RelayCheck demo](https://i.ytimg.com/vi/amxQqjdwoKQ/maxresdefault.jpg)](https://youtu.be/amxQqjdwoKQ)
-
-<iframe width="960" height="540" src="https://www.youtube.com/embed/amxQqjdwoKQ?autoplay=1&mute=1&loop=1&playlist=amxQqjdwoKQ&rel=0&playsinline=1" title="RelayCheck product demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+[![Watch the full demo on YouTube](public/media/relaycheck-demo.gif)](https://youtu.be/amxQqjdwoKQ)
 
 55 seconds, recorded from the running app: a real duplicate-delivery run
 (3 attempts → 1 business effect, verified) and the same assertion catching a
-deliberately broken receiver (3 effects, failed). Also available as
-[MP4](public/media/relaycheck-demo.mp4).
+deliberately broken receiver (3 effects, failed).
+
+[Full video on YouTube](https://youtu.be/amxQqjdwoKQ) · [MP4](public/media/relaycheck-demo.mp4)
 
 ## Accounts
 
