@@ -9,6 +9,21 @@ shell, navigation, typed server-side API client, status components, and a
 runs overview that renders **real** Control API data with explicit empty and
 API-error states. No fabricated rows anywhere.
 
+## Demo
+
+<video controls poster="public/media/relaycheck-demo-poster.jpg" width="100%">
+  <source src="public/media/relaycheck-demo.mp4" type="video/mp4" />
+  <a href="public/media/relaycheck-demo.mp4">
+    <img src="public/media/relaycheck-demo-poster.jpg" alt="RelayCheck demo: three delivery attempts, one business effect" width="100%" />
+  </a>
+</video>
+
+55 seconds, recorded from the running app. It shows a real duplicate-delivery
+run (3 attempts → 1 business effect, verified) and the same assertion catching a
+deliberately broken receiver (3 effects, failed).
+
+[Watch the demo (MP4, 55 s)](public/media/relaycheck-demo.mp4)
+
 ## Accounts
 
 When the Control API runs with `AUTH_REQUIRED=true`, the dashboard shows
