@@ -15,7 +15,7 @@ async function register(page: Page): Promise<string> {
   await page.getByLabel('Password').fill(PASSWORD);
   await page.getByRole('button', { name: 'Create your workspace' }).click();
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.getByRole('heading', { name: 'Evidence for every delivery.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Webhook test runs' })).toBeVisible();
   return email;
 }
 

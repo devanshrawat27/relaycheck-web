@@ -115,7 +115,7 @@ body {
 }
 .scenario-option input:checked ~ .scenario-card .scenario-tag {
   background-color: theme('colors.ember.border');
-  color: theme('colors.ember.dark');
+  color: theme('colors.ink.DEFAULT');
 }
 .scenario-option input:checked ~ .scenario-card .scenario-dot {
   border-color: theme('colors.ember.DEFAULT');

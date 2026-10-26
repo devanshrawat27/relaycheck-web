@@ -1,5 +1,12 @@
 import { RunsOverviewContent } from '@/components/runs-overview-content';
-import { getRunsPage, isRunStatus, type RunListItem, type RunStatus } from '@/lib/api';
+import {
+  getMetrics,
+  getRunsPage,
+  isRunStatus,
+  type MetricsResponse,
+  type RunListItem,
+  type RunStatus,
+} from '@/lib/api';
 import { sessionToken } from '@/lib/session';
 
 interface RunsOverviewProps {
@@ -20,6 +27,7 @@ export async function RunsOverview({ searchParams }: RunsOverviewProps) {
   let runs: RunListItem[] = [];
   let nextCursor: string | null = null;
   let errorMessage: string | null = null;
+  let metrics: MetricsResponse | null = null;
 
   try {
     const page = await getRunsPage({ take: 20, status, cursor }, token);
@@ -29,6 +37,13 @@ export async function RunsOverview({ searchParams }: RunsOverviewProps) {
     errorMessage = error instanceof Error ? error.message : 'Unknown error';
   }
 
+  // Best-effort: the compact overview is hidden when metrics are unavailable.
+  try {
+    metrics = await getMetrics(token);
+  } catch {
+    metrics = null;
+  }
+
   return (
     <RunsOverviewContent
       status={status}
@@ -36,6 +51,7 @@ export async function RunsOverview({ searchParams }: RunsOverviewProps) {
       runs={runs}
       nextCursor={nextCursor}
       errorMessage={errorMessage}
+      metrics={metrics}
     />
   );
 }

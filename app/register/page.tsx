@@ -50,7 +50,7 @@ export default function RegisterPage({ searchParams }: RegisterPageProps) {
           />
           <p className="flex items-center gap-2 text-[11px] text-[#82796F]"><span aria-hidden className="h-1 w-1 rounded-full bg-[#C8784E]" />At least 8 characters</p>
         </div>
-        <button type="submit" className="group inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-[#C94F16] px-5 text-[13px] font-semibold text-white shadow-[0_8px_18px_-10px_rgba(168,61,16,0.8)] transition-[transform,background-color,box-shadow] hover:-translate-y-0.5 hover:bg-[#A83D10] hover:shadow-[0_12px_24px_-12px_rgba(168,61,16,0.85)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ember active:translate-y-0">
+        <button type="submit" className="group inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-ember px-5 text-[13px] font-semibold text-white shadow-[0_8px_18px_-10px_rgba(168,61,16,0.8)] transition-[transform,background-color,box-shadow] hover:-translate-y-0.5 hover:bg-ember-dark hover:shadow-[0_12px_24px_-12px_rgba(168,61,16,0.85)] focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-ember active:translate-y-0">
           Create your workspace
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </button>

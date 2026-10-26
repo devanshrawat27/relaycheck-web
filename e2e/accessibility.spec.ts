@@ -38,6 +38,6 @@ test('the authenticated runs dashboard has no serious accessibility violations',
   await page.getByLabel('Password').fill('a11y-password-123');
   await page.getByRole('button', { name: 'Create your workspace' }).click();
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.getByRole('heading', { name: 'Evidence for every delivery.' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Webhook test runs' })).toBeVisible();
   await expectNoSeriousViolations(page);
 });

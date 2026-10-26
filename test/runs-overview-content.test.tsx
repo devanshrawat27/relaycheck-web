@@ -31,7 +31,7 @@ describe('RunsOverviewContent', () => {
   it('shows a compact first-run guide and clearly illustrative evidence preview with one CTA', () => {
     const { container } = render(<RunsOverviewContent {...emptyProps} />);
 
-    expect(screen.getByRole('heading', { name: 'Evidence for every delivery.' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Webhook test runs' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'See what happened. Prove what mattered.' })).toBeInTheDocument();
     expect(screen.getByText('Each delivery, in order')).toBeInTheDocument();
     expect(screen.getByText('Receiver status and timing')).toBeInTheDocument();
@@ -61,9 +61,32 @@ describe('RunsOverviewContent', () => {
     expect(screen.getAllByText('Three deliveries verified against one business effect.').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('1.25 s').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByRole('link', { name: 'run-2026' })).toHaveAttribute('href', '/runs/run-2026-abc12345');
-    expect(screen.getByRole('link', { name: 'View run run-2026-abc12345' })).toHaveAttribute('href', '/runs/run-2026-abc12345');
+    expect(screen.getByRole('link', { name: /Details for run run-2026-abc12345/ })).toHaveAttribute('href', '/runs/run-2026-abc12345');
     expect(screen.getByRole('link', { name: 'Load older runs' })).toHaveAttribute('href', '/?status=passed&cursor=older-run');
     expect(screen.queryByText('Illustrative · not a recorded run')).not.toBeInTheDocument();
+  });
+
+  it('shows a compact operational overview from metrics', () => {
+    render(
+      <RunsOverviewContent
+        {...emptyProps}
+        metrics={{
+          runs: { queued: 1, running: 0, passed: 2, failed: 1, error: 0 },
+          outbox: { pending: 0, sending: 0, failed: 0, oldestPendingAgeMs: null },
+          queues: { work: 0, deadLetter: 0 },
+          generatedAt: '2026-10-22T00:00:00.000Z',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Operational overview')).toBeInTheDocument();
+    expect(screen.getByText('Work queue')).toBeInTheDocument();
+    expect(screen.getByText('Outbox failed')).toBeInTheDocument();
+  });
+
+  it('hides the overview when metrics are unavailable', () => {
+    render(<RunsOverviewContent {...emptyProps} metrics={null} />);
+    expect(screen.queryByText('Operational overview')).not.toBeInTheDocument();
   });
 
   it('keeps filter-empty and API-error states distinct', () => {

@@ -24,7 +24,7 @@ describe('RunScenarioForm', () => {
     expect((radios[0] as HTMLInputElement).checked).toBe(true);
 
     expect(screen.getByText('Choose a scenario')).toBeInTheDocument();
-    expect(screen.getByText('Bounded by design')).toBeInTheDocument();
+    expect(screen.getByText(/Bounded by design/)).toBeInTheDocument();
     expect(screen.getByText('Controlled receiver failure')).toBeInTheDocument();
     expect(screen.getByText('Receiver timeout')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Start run/ })).toBeInTheDocument();
@@ -48,6 +48,14 @@ describe('RunScenarioForm', () => {
     expect(screen.getByLabelText(/Timeout per delivery/)).toHaveAttribute('max', '15000');
     expect(screen.getByLabelText(/Injected status/)).toHaveAttribute('min', '400');
     expect(screen.getByLabelText(/Injected delay/)).toHaveAttribute('max', '10000');
+  });
+
+  it('shows a review summary before submission', () => {
+    render(<RunScenarioForm targets={TARGETS} />);
+
+    expect(screen.getByText('Review what will run')).toBeInTheDocument();
+    expect(screen.getAllByText('Duplicate delivery').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('Scenario')).toBeInTheDocument();
   });
 
   it('never exposes a destination URL input', () => {

@@ -46,7 +46,7 @@ export default async function NewRunPage({ searchParams }: NewRunPageProps) {
         >
           Run a scenario.
         </h1>
-        <p className="max-w-xl text-xs leading-relaxed text-muted">
+        <p className="max-w-xl text-sm leading-relaxed text-muted">
           Start a repeatable webhook test against the local demo receiver. RelayCheck chooses the
           parameters; you choose the behaviour you want to prove.
         </p>
